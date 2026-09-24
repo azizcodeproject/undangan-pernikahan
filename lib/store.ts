@@ -1,5 +1,4 @@
-import { promises as fs } from "fs";
-import path from "path";
+import { readJsonDocument, writeJsonDocument } from "@/lib/data-store";
 import type {
   GalleryItem,
   GuestbookMessage,
@@ -7,33 +6,16 @@ import type {
   WeddingContent,
 } from "@/lib/types";
 
-const dataDirectory = path.join(process.cwd(), "data");
-
-async function readJsonFile<T>(fileName: string): Promise<T> {
-  const filePath = path.join(dataDirectory, fileName);
-  const rawContent = await fs.readFile(filePath, "utf8");
-  return JSON.parse(rawContent) as T;
-}
-
-async function writeJsonFile(fileName: string, value: unknown): Promise<void> {
-  await fs.mkdir(dataDirectory, { recursive: true });
-  const filePath = path.join(dataDirectory, fileName);
-  const temporaryPath = `${filePath}.${process.pid}.tmp`;
-  const serialized = `${JSON.stringify(value, null, 2)}\n`;
-  await fs.writeFile(temporaryPath, serialized, "utf8");
-  await fs.rename(temporaryPath, filePath);
-}
-
 export async function readWedding(): Promise<WeddingContent> {
-  return readJsonFile<WeddingContent>("wedding.json");
+  return readJsonDocument<WeddingContent>("wedding.json");
 }
 
 export async function writeWedding(wedding: WeddingContent): Promise<void> {
-  await writeJsonFile("wedding.json", wedding);
+  await writeJsonDocument("wedding.json", wedding);
 }
 
 export async function readGallery(): Promise<GalleryItem[]> {
-  const items = await readJsonFile<GalleryItem[]>("gallery.json");
+  const items = await readJsonDocument<GalleryItem[]>("gallery.json");
   return [...items].sort((left, right) => left.order - right.order);
 }
 
@@ -42,25 +24,25 @@ export async function writeGallery(items: GalleryItem[]): Promise<void> {
     ...item,
     order: index,
   }));
-  await writeJsonFile("gallery.json", normalized);
+  await writeJsonDocument("gallery.json", normalized);
 }
 
 export async function readMessages(): Promise<GuestbookMessage[]> {
-  return readJsonFile<GuestbookMessage[]>("messages.json");
+  return readJsonDocument<GuestbookMessage[]>("messages.json");
 }
 
 export async function writeMessages(
   messages: GuestbookMessage[],
 ): Promise<void> {
-  await writeJsonFile("messages.json", messages);
+  await writeJsonDocument("messages.json", messages);
 }
 
 export async function readRsvps(): Promise<RsvpEntry[]> {
-  return readJsonFile<RsvpEntry[]>("rsvp.json");
+  return readJsonDocument<RsvpEntry[]>("rsvp.json");
 }
 
 export async function writeRsvps(entries: RsvpEntry[]): Promise<void> {
-  await writeJsonFile("rsvp.json", entries);
+  await writeJsonDocument("rsvp.json", entries);
 }
 
 export async function appendRsvp(entry: RsvpEntry): Promise<RsvpEntry> {

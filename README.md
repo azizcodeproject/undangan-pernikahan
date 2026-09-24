@@ -2,7 +2,7 @@
 
 Website undangan pernikahan yang elegan, hangat, dan mobile-first. Dibangun dengan Next.js (App Router), TypeScript, dan Tailwind CSS agar langsung siap di-deploy ke **Vercel**. Nama produksi yang disarankan: **`yusufsintia`** → [https://yusufsintia.vercel.app](https://yusufsintia.vercel.app).
 
-Data pasangan, galeri, RSVP, dan buku tamu disimpan sebagai berkas JSON di folder `data/`.
+Data pasangan, galeri, RSVP, dan buku tamu disimpan sebagai dokumen JSON. Secara lokal (tanpa token Blob) sumbernya adalah folder `data/`. Di Vercel, tulisan memakai **Vercel Blob** agar bertahan antar request.
 
 ## Menjalankan secara lokal
 
@@ -27,6 +27,7 @@ npm start
 | Nama | Default | Kegunaan |
 | --- | --- | --- |
 | `CMS_PASSWORD` | `change-me` | Kata sandi halaman `/admin` |
+| `BLOB_READ_WRITE_TOKEN` | (kosong) | Token baca/tulis Vercel Blob. Wajib di Production/Preview. Kosongkan di `npm run dev` agar memakai `data/*.json`. |
 
 Salin `.env.example` menjadi `.env.local` lalu ganti sandinya sebelum dipakai di produksi. Di Vercel, isi variabel yang sama di Project Settings → Environment Variables (Production + Preview).
 
@@ -58,18 +59,23 @@ Berkas `background.mp3` adalah pad ambient prosedural untuk uji coba. Ganti deng
 
 ## Penyimpanan JSON di Vercel (penting)
 
-API menulis ke `data/*.json` di filesystem. Itu memenuhi kebutuhan form RSVP, buku tamu, dan CMS.
+Filesystem serverless Vercel bersifat *read-only* (`/var/task`). Menulis `data/*.json` di production akan gagal (`EROFS`). RSVP, buku tamu, galeri, dan suntingan CMS **harus** memakai Vercel Blob.
 
-- **Lokal**: perubahan bertahan di disk.
-- **Vercel (serverless)**: filesystem bersifat *ephemeral*. Tulisan bisa hilang saat instance berganti. **Bacaan** tetap andal dari JSON yang sudah di-commit (seed + suntingan yang di-push).
+### Lokal (`npm run dev`)
 
-Pendekatan praktis tanpa layanan berbayar:
+Jika `BLOB_READ_WRITE_TOKEN` kosong, API membaca/menulis `data/*.json` di disk. Berkas seed di repo tetap menjadi fallback awal.
 
-1. Isi `data/wedding.json` dan `data/gallery.json` di repo, lalu deploy — undangan tampil utuh.
-2. Untuk RSVP/pesan yang ingin disimpan permanen: jalankan form/CMS secara lokal, commit berkas JSON yang berubah, lalu push agar Vercel men-deploy ulang.
-3. Vercel KV / Blob / Postgres hanya perlu jika undangan ini dipakai jangka panjang dan tamu menulis terus-menerus. Jangan blokir rilis hanya untuk itu.
+### Produksi / Preview di Vercel
 
-API tulis JSON tetap ada. Tamu tetap bisa mengirim RSVP/pesan; data itu hidup selama instance masih sama, lalu kembali ke seed yang di-commit.
+1. Buka [Vercel Dashboard](https://vercel.com) → Storage → **Create Database** → **Blob**.
+2. Hubungkan store itu ke project **`yusufsintia`** (Production + Preview).
+3. Vercel akan mengisi `BLOB_READ_WRITE_TOKEN`. Cek di Project Settings → Environment Variables. Jika token tidak muncul otomatis, salin dari halaman Blob store lalu tambahkan manual.
+4. **Redeploy** production setelah token terpasang. Token baru tidak berlaku pada deployment yang sudah jalan.
+5. Uji `POST /api/rsvp` dan `POST /api/messages`. Response harus `200` dan data tetap ada setelah refresh.
+
+Tanpa token di Vercel, API tulis mengembalikan `503` dengan pesan bahwa Blob belum dikonfigurasi — bukan lagi error jaringan yang kabur.
+
+Baca pertama kali: jika Blob belum punya dokumen, API memakai seed `data/*.json` yang di-commit, lalu tulisan berikutnya tersimpan di Blob.
 
 ## Deploy ke Vercel (situs publik, repo bisa privat)
 
@@ -79,7 +85,9 @@ Repo GitHub yang privat tetap bisa menghasilkan situs publik di `yusufsintia.ver
 2. Buka [Vercel](https://vercel.com) → **Add New Project** → pilih repositori ini.
 3. **Project Name:** `yusufsintia` (menghasilkan `https://yusufsintia.vercel.app`).
 4. Framework Preset: **Next.js** (terdeteksi otomatis). Build: `npm run build`. Output: default App Router, tidak perlu `vercel.json`.
-5. Environment Variables: `CMS_PASSWORD` (jangan pakai `change-me` di produksi).
+5. Environment Variables:
+   - `CMS_PASSWORD` (jangan pakai `change-me` di produksi)
+   - `BLOB_READ_WRITE_TOKEN` (dari Vercel Blob store yang dihubungkan ke project ini)
 6. Deploy. Domain `*.vercel.app` bersifat publik — tamu tidak perlu akun GitHub.
 
 Custom domain (opsional) bisa ditambahkan nanti di Vercel → Project → Domains.
@@ -90,7 +98,7 @@ Custom domain (opsional) bisa ditambahkan nanti di Vercel → Project → Domain
 app/                 # halaman undangan, /admin, dan API
 components/          # UI undangan + CMS
 data/                # sumber konten JSON
-lib/                 # baca/tulis JSON, auth CMS
+lib/                 # data-store (Blob/FS), auth CMS
 public/music/        # berkas audio
 public/images/       # fallback foto
 ```
