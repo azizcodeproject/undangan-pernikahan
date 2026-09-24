@@ -1,38 +1,38 @@
 [
   {
-    "id": "momen-1",
-    "src": "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=1200&q=80",
-    "caption": "Hiasan pelaminan yang tenang, tanpa berlebihan.",
-    "order": 0
-  },
-  {
-    "id": "momen-2",
-    "src": "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?auto=format&fit=crop&w=1200&q=80",
-    "caption": "Meja tamu yang kami siapkan pelan-pelan.",
-    "order": 1
-  },
-  {
-    "id": "momen-3",
-    "src": "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=1200&q=80",
-    "caption": "Langkah pelan menuju hari yang sama.",
-    "order": 2
-  },
-  {
-    "id": "momen-4",
-    "src": "https://images.unsplash.com/photo-1490750967868-88aa4486c946?auto=format&fit=crop&w=1200&q=80",
-    "caption": "Rangkaian bunga yang kami pilih pelan-pelan.",
-    "order": 3
-  },
-  {
-    "id": "momen-5",
-    "src": "https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?auto=format&fit=crop&w=1200&q=80",
-    "caption": "Cincin sebagai tanda amanah.",
-    "order": 4
-  },
-  {
     "id": "momen-6",
     "src": "https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&w=1200&q=80",
     "caption": "Hari yang kami nantikan, tanpa banyak basa-basi.",
+    "order": 0
+  },
+  {
+    "id": "b38f2e64-5464-44d3-bd0e-474fdce99aaa",
+    "src": "/uploads/1790234948685.jpg",
+    "caption": "IMG-20260924-WA0007.jpg",
+    "order": 1
+  },
+  {
+    "id": "3f360f39-2d73-4fd3-b7ea-60e87e8c1347",
+    "src": "/uploads/1790234968885.jpg",
+    "caption": "IMG-20260924-WA0010.jpg",
+    "order": 2
+  },
+  {
+    "id": "b66aa8c5-f1cf-46de-ac5a-21e142330261",
+    "src": "/uploads/1790234980023.jpg",
+    "caption": "IMG-20260924-WA0013.jpg",
+    "order": 3
+  },
+  {
+    "id": "4081cab7-0c4e-401e-b10f-fb88d7ebfb9a",
+    "src": "/uploads/1790234987489.jpg",
+    "caption": "IMG-20260924-WA0016.jpg",
+    "order": 4
+  },
+  {
+    "id": "142df40e-8319-4f13-a1a1-b568cbd42dc1",
+    "src": "/uploads/1790234993723.jpg",
+    "caption": "IMG-20260924-WA0022.jpg",
     "order": 5
   }
 ]
