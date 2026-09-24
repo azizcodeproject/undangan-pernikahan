@@ -1,7 +1,7 @@
 import { revalidatePath } from "next/cache";
-import { requireCmsAuth } from "@/lib/auth";
+import { cmsUnauthorizedResponse, requireCmsAuth } from "@/lib/auth";
 import { storageFailureResponse } from "@/lib/http-error";
-import { appendMessage, readMessages } from "@/lib/store";
+import { appendMessage, deleteMessage, readMessages } from "@/lib/store";
 import type { GuestbookMessage } from "@/lib/types";
 
 export const runtime = "nodejs";
@@ -50,10 +50,47 @@ export async function POST(request: Request) {
 
   try {
     await appendMessage(entry);
-    revalidatePath("/");
-    revalidatePath("/admin");
+    revalidateInvitation();
     return Response.json({ message: entry });
   } catch (error) {
     return storageFailureResponse(error);
   }
+}
+
+export async function DELETE(request: Request) {
+  if (!(await requireCmsAuth())) {
+    return cmsUnauthorizedResponse();
+  }
+
+  const id = await readDeleteId(request);
+  if (!id) {
+    return Response.json({ error: "ID pesan perlu diisi." }, { status: 400 });
+  }
+
+  try {
+    const removed = await deleteMessage(id);
+    if (!removed) {
+      return Response.json({ error: "Pesan tidak ditemukan." }, { status: 404 });
+    }
+
+    revalidateInvitation();
+    return Response.json({ message: removed });
+  } catch (error) {
+    return storageFailureResponse(error);
+  }
+}
+
+async function readDeleteId(request: Request): Promise<string> {
+  const body = (await request.json().catch(() => null)) as { id?: string } | null;
+  const fromBody = body?.id?.trim() || "";
+  if (fromBody) {
+    return fromBody;
+  }
+
+  return new URL(request.url).searchParams.get("id")?.trim() || "";
+}
+
+function revalidateInvitation() {
+  revalidatePath("/");
+  revalidatePath("/admin");
 }

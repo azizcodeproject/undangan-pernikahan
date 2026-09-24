@@ -3,7 +3,10 @@
 import { FormEvent, useEffect, useState } from "react";
 import Link from "next/link";
 import { SmartImage } from "@/components/invitation/SmartImage";
-import { readApiErrorMessage } from "@/lib/form-feedback";
+import {
+  networkFailureMessage,
+  readApiErrorMessage,
+} from "@/lib/form-feedback";
 import { formatDateTime } from "@/lib/format";
 import type {
   GalleryItem,
@@ -530,6 +533,8 @@ function WeddingEditor() {
 function GuestInbox() {
   const [rsvps, setRsvps] = useState<RsvpEntry[]>([]);
   const [messages, setMessages] = useState<GuestbookMessage[]>([]);
+  const [statusText, setStatusText] = useState("");
+  const [pendingDeleteKey, setPendingDeleteKey] = useState("");
 
   useEffect(() => {
     fetch("/api/rsvp")
@@ -542,44 +547,132 @@ function GuestInbox() {
       );
   }, []);
 
+  async function removeInboxItem(options: {
+    endpoint: "/api/rsvp" | "/api/messages";
+    id: string;
+    successText: string;
+    onRemoved: () => void;
+  }) {
+    setPendingDeleteKey(`${options.endpoint}:${options.id}`);
+    try {
+      const response = await fetch(options.endpoint, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: options.id }),
+      });
+      if (!response.ok) {
+        setStatusText(
+          await readApiErrorMessage(response, "Penghapusan belum berhasil."),
+        );
+        return;
+      }
+      options.onRemoved();
+      setStatusText(options.successText);
+    } catch {
+      setStatusText(networkFailureMessage);
+    } finally {
+      const deleteKey = `${options.endpoint}:${options.id}`;
+      setPendingDeleteKey((current) => (current === deleteKey ? "" : current));
+    }
+  }
+
+  function handleDeleteRsvp(id: string) {
+    return removeInboxItem({
+      endpoint: "/api/rsvp",
+      id,
+      successText: "RSVP sudah dihapus.",
+      onRemoved: () =>
+        setRsvps((current) => current.filter((entry) => entry.id !== id)),
+    });
+  }
+
+  function handleDeleteMessage(id: string) {
+    return removeInboxItem({
+      endpoint: "/api/messages",
+      id,
+      successText: "Pesan sudah dihapus.",
+      onRemoved: () =>
+        setMessages((current) => current.filter((entry) => entry.id !== id)),
+    });
+  }
+
   return (
-    <div className="grid gap-5 lg:grid-cols-2">
-      <section className="rounded-3xl border border-line bg-card p-5">
-        <h2 className="font-serif text-2xl text-sapphire-deep">RSVP</h2>
-        <div className="mt-4 overflow-x-auto">
-          <table className="w-full text-left text-sm">
-            <thead>
-              <tr className="text-muted">
-                <th className="pb-2 font-medium">Nama</th>
-                <th className="pb-2 font-medium">Status</th>
-                <th className="pb-2 font-medium">Tamu</th>
-              </tr>
-            </thead>
-            <tbody>
-              {rsvps.map((entry) => (
-                <tr key={entry.id} className="border-t border-line/70">
-                  <td className="py-2 pr-3">{entry.name}</td>
-                  <td className="py-2 pr-3">{attendanceLabel[entry.attendance]}</td>
-                  <td className="py-2">{entry.guestCount}</td>
+    <div className="grid gap-5">
+      {statusText ? <p className="text-sm text-jade-deep">{statusText}</p> : null}
+      <div className="grid gap-5 lg:grid-cols-2">
+        <section className="rounded-3xl border border-line bg-card p-5">
+          <h2 className="font-serif text-2xl text-sapphire-deep">RSVP</h2>
+          <div className="mt-4 overflow-x-auto">
+            <table className="w-full text-left text-sm">
+              <thead>
+                <tr className="text-muted">
+                  <th className="pb-2 font-medium">Nama</th>
+                  <th className="pb-2 font-medium">Status</th>
+                  <th className="pb-2 font-medium">Tamu</th>
+                  <th className="pb-2 font-medium">Aksi</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </section>
-      <section className="rounded-3xl border border-line bg-card p-5">
-        <h2 className="font-serif text-2xl text-sapphire-deep">Pesan</h2>
-        <ul className="mt-4 flex flex-col gap-3">
-          {messages.map((entry) => (
-            <li key={entry.id} className="rounded-2xl bg-cream px-4 py-3">
-              <p className="font-medium text-ink">{entry.name}</p>
-              <p className="mt-1 text-sm text-muted">{entry.message}</p>
-              <p className="mt-2 text-xs text-muted">{formatDateTime(entry.createdAt)}</p>
-            </li>
-          ))}
-        </ul>
-      </section>
+              </thead>
+              <tbody>
+                {rsvps.map((entry) => (
+                  <tr key={entry.id} className="border-t border-line/70">
+                    <td className="py-2 pr-3">{entry.name}</td>
+                    <td className="py-2 pr-3">
+                      {attendanceLabel[entry.attendance]}
+                    </td>
+                    <td className="py-2 pr-3">{entry.guestCount}</td>
+                    <td className="py-2">
+                      <DeleteButton
+                        disabled={pendingDeleteKey !== ""}
+                        onClick={() => void handleDeleteRsvp(entry.id)}
+                      />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+        <section className="rounded-3xl border border-line bg-card p-5">
+          <h2 className="font-serif text-2xl text-sapphire-deep">Pesan</h2>
+          <ul className="mt-4 flex flex-col gap-3">
+            {messages.map((entry) => (
+              <li key={entry.id} className="rounded-2xl bg-cream px-4 py-3">
+                <div className="flex items-start justify-between gap-3">
+                  <p className="font-medium text-ink">{entry.name}</p>
+                  <DeleteButton
+                    disabled={pendingDeleteKey !== ""}
+                    onClick={() => void handleDeleteMessage(entry.id)}
+                  />
+                </div>
+                <p className="mt-1 text-sm text-muted">{entry.message}</p>
+                <p className="mt-2 text-xs text-muted">
+                  {formatDateTime(entry.createdAt)}
+                </p>
+              </li>
+            ))}
+          </ul>
+        </section>
+      </div>
     </div>
+  );
+}
+
+function DeleteButton({
+  disabled,
+  onClick,
+}: {
+  disabled: boolean;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      disabled={disabled}
+      onClick={onClick}
+      className="rounded-full border border-sapphire/20 px-3 py-1 text-sapphire disabled:opacity-50"
+    >
+      Hapus
+    </button>
   );
 }
 

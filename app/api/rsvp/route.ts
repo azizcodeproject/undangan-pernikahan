@@ -1,7 +1,7 @@
 import { revalidatePath } from "next/cache";
 import { requireCmsAuth, cmsUnauthorizedResponse } from "@/lib/auth";
 import { storageFailureResponse } from "@/lib/http-error";
-import { appendRsvp, readRsvps } from "@/lib/store";
+import { appendRsvp, deleteRsvp, readRsvps } from "@/lib/store";
 import type { AttendanceStatus, RsvpEntry } from "@/lib/types";
 
 export const runtime = "nodejs";
@@ -60,10 +60,47 @@ export async function POST(request: Request) {
 
   try {
     await appendRsvp(entry);
-    revalidatePath("/");
-    revalidatePath("/admin");
+    revalidateInvitation();
     return Response.json({ entry });
   } catch (error) {
     return storageFailureResponse(error);
   }
+}
+
+export async function DELETE(request: Request) {
+  if (!(await requireCmsAuth())) {
+    return cmsUnauthorizedResponse();
+  }
+
+  const id = await readDeleteId(request);
+  if (!id) {
+    return Response.json({ error: "ID RSVP perlu diisi." }, { status: 400 });
+  }
+
+  try {
+    const removed = await deleteRsvp(id);
+    if (!removed) {
+      return Response.json({ error: "RSVP tidak ditemukan." }, { status: 404 });
+    }
+
+    revalidateInvitation();
+    return Response.json({ entry: removed });
+  } catch (error) {
+    return storageFailureResponse(error);
+  }
+}
+
+async function readDeleteId(request: Request): Promise<string> {
+  const body = (await request.json().catch(() => null)) as { id?: string } | null;
+  const fromBody = body?.id?.trim() || "";
+  if (fromBody) {
+    return fromBody;
+  }
+
+  return new URL(request.url).searchParams.get("id")?.trim() || "";
+}
+
+function revalidateInvitation() {
+  revalidatePath("/");
+  revalidatePath("/admin");
 }

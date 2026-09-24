@@ -60,3 +60,27 @@ export async function appendMessage(
   await writeMessages(existing);
   return message;
 }
+
+export async function deleteRsvp(id: string): Promise<RsvpEntry | null> {
+  return deleteEntryById(await readRsvps(), id, writeRsvps);
+}
+
+export async function deleteMessage(
+  id: string,
+): Promise<GuestbookMessage | null> {
+  return deleteEntryById(await readMessages(), id, writeMessages);
+}
+
+async function deleteEntryById<T extends { id: string }>(
+  entries: T[],
+  id: string,
+  persistEntries: (remaining: T[]) => Promise<void>,
+): Promise<T | null> {
+  const removed = entries.find((entry) => entry.id === id);
+  if (!removed) {
+    return null;
+  }
+
+  await persistEntries(entries.filter((entry) => entry.id !== id));
+  return removed;
+}
