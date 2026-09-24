@@ -68,14 +68,15 @@ Jika `BLOB_READ_WRITE_TOKEN` kosong, API membaca/menulis `data/*.json` di disk. 
 ### Produksi / Preview di Vercel
 
 1. Buka [Vercel Dashboard](https://vercel.com) → Storage → **Create Database** → **Blob**.
-2. Hubungkan store itu ke project **`yusufsintia`** (Production + Preview).
-3. Vercel akan mengisi `BLOB_READ_WRITE_TOKEN`. Cek di Project Settings → Environment Variables. Jika token tidak muncul otomatis, salin dari halaman Blob store lalu tambahkan manual.
-4. **Redeploy** production setelah token terpasang. Token baru tidak berlaku pada deployment yang sudah jalan.
-5. Uji `POST /api/rsvp` dan `POST /api/messages`. Response harus `200` dan data tetap ada setelah refresh.
+2. Pilih akses **Public**. Satu store dipakai untuk JSON (RSVP, pesan, galeri, data acara) dan unggahan foto CMS. Store Private tidak dipakai di kode ini.
+3. Hubungkan store itu ke project **`yusufsintia`** (Production + Preview).
+4. Vercel akan mengisi `BLOB_READ_WRITE_TOKEN`. Cek di Project Settings → Environment Variables. Jika token tidak muncul otomatis, salin dari halaman Blob store lalu tambahkan manual.
+5. **Redeploy** production setelah token terpasang. Token baru tidak berlaku pada deployment yang sudah jalan.
+6. Uji `POST /api/rsvp` dan `POST /api/messages`. Response harus `200` dan data tetap ada setelah refresh.
 
 Tanpa token di Vercel, API tulis mengembalikan `503` dengan pesan bahwa Blob belum dikonfigurasi — bukan lagi error jaringan yang kabur.
 
-Baca pertama kali: jika Blob belum punya dokumen, API memakai seed `data/*.json` yang di-commit, lalu tulisan berikutnya tersimpan di Blob.
+Baca pertama kali: jika Blob belum punya dokumen, API memakai seed `data/*.json` yang di-commit. Setelah ada tulisan pertama, **Blob menjadi sumber kebenaran** untuk dokumen itu. Mengubah JSON di repo tidak mengubah data produksi yang sudah tersimpan; sunting lewat CMS `/admin`, atau hapus blob `data/*.json` di dashboard Blob jika ingin seed dipakai lagi.
 
 ## Deploy ke Vercel (situs publik, repo bisa privat)
 

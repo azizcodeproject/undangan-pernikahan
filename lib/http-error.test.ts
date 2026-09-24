@@ -5,14 +5,14 @@ describe("storageFailureResponse", () => {
   test("mengembalikan JSON 503 dengan pesan konfigurasi Blob", async () => {
     const response = storageFailureResponse(
       new Error(
-        "Penyimpanan belum dikonfigurasi. Buat Vercel Blob store lalu isi BLOB_READ_WRITE_TOKEN, kemudian deploy ulang.",
+        "Penyimpanan belum dikonfigurasi. Buat Vercel Blob store (Public) lalu isi BLOB_READ_WRITE_TOKEN, kemudian deploy ulang.",
       ),
     );
 
     expect(response.status).toBe(503);
     await expect(response.json()).resolves.toEqual({
       error:
-        "Penyimpanan belum dikonfigurasi. Buat Vercel Blob store lalu isi BLOB_READ_WRITE_TOKEN, kemudian deploy ulang.",
+        "Penyimpanan belum dikonfigurasi. Buat Vercel Blob store (Public) lalu isi BLOB_READ_WRITE_TOKEN, kemudian deploy ulang.",
     });
   });
 

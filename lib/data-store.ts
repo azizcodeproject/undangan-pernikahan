@@ -30,8 +30,9 @@ export type DataStoreAdapters = {
 
 const dataDirectory = path.join(process.cwd(), "data");
 const uploadDirectory = path.join(process.cwd(), "public", "uploads");
+const blobAccess = "public" as const;
 const missingBlobTokenMessage =
-  "Penyimpanan belum dikonfigurasi. Buat Vercel Blob store lalu isi BLOB_READ_WRITE_TOKEN, kemudian deploy ulang.";
+  "Penyimpanan belum dikonfigurasi. Buat Vercel Blob store (Public) lalu isi BLOB_READ_WRITE_TOKEN, kemudian deploy ulang.";
 
 function readProcessEnv(): DataStoreEnv {
   return {
@@ -157,7 +158,7 @@ const defaultBlobClient: BlobStorageClient = {
     const { get } = await import("@vercel/blob");
     try {
       const result = await get(pathname, {
-        access: "private",
+        access: blobAccess,
         useCache: false,
       });
 
@@ -181,7 +182,7 @@ const defaultBlobClient: BlobStorageClient = {
   async putJson(pathname, value) {
     const { put } = await import("@vercel/blob");
     await put(pathname, `${JSON.stringify(value, null, 2)}\n`, {
-      access: "private",
+      access: blobAccess,
       addRandomSuffix: false,
       allowOverwrite: true,
       contentType: "application/json",
@@ -191,7 +192,7 @@ const defaultBlobClient: BlobStorageClient = {
   async putFile(pathname, body, contentType) {
     const { put } = await import("@vercel/blob");
     const blob = await put(pathname, Buffer.from(body), {
-      access: "public",
+      access: blobAccess,
       addRandomSuffix: false,
       allowOverwrite: true,
       contentType,
