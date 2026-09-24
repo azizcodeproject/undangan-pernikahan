@@ -10,7 +10,7 @@ type CoupleIntroProps = {
 
 export function CoupleIntro({ wedding, guestName }: CoupleIntroProps) {
   return (
-    <section id="membuka" className="px-5 py-16 sm:py-20">
+    <section id="membuka" className="px-5 py-12 sm:py-20">
       <Reveal>
         <div className="mx-auto max-w-3xl text-center">
           <p className="font-arabic text-2xl text-sapphire-deep">

@@ -60,7 +60,7 @@ export function InvitationApp({
       <InvitationNav
         coupleNames={coupleDisplayName(wedding.bride.name, wedding.groom.name)}
       />
-      <main>
+      <main className="pb-20">
         <CoupleIntro wedding={wedding} guestName={guestName} />
         <QuranSection ayahs={wedding.quran} />
         <EventSection wedding={wedding} />

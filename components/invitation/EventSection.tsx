@@ -55,7 +55,7 @@ export function EventSection({ wedding }: EventSectionProps) {
                 href={event.mapsUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="mt-6 inline-flex items-center justify-center rounded-full border border-sapphire/20 px-4 py-2.5 text-sm font-medium text-sapphire transition hover:bg-sapphire hover:text-white"
+                className="mt-6 inline-flex items-center justify-center rounded-full bg-sand px-4 py-2.5 text-sm font-medium text-sapphire-deep transition hover:bg-sapphire hover:text-white"
               >
                 Lihat peta
               </a>

@@ -27,7 +27,7 @@ export function Cover({ wedding, guestName, isOpen, onOpen }: CoverProps) {
         className="absolute inset-0 size-full object-cover"
       />
       <div className="cover-overlay absolute inset-0" />
-      <div className="absolute inset-0 bg-[url('/images/pattern.svg')] opacity-20 mix-blend-soft-light" />
+      <div className="absolute inset-0 bg-[url('/images/pattern.svg')] opacity-10 mix-blend-soft-light" />
 
       <div className="relative flex h-full flex-col items-center justify-between px-6 py-10 text-center text-white">
         <div className="flex flex-col items-center gap-3 pt-4">
@@ -38,10 +38,10 @@ export function Cover({ wedding, guestName, isOpen, onOpen }: CoverProps) {
         </div>
 
         <div className="flex flex-col items-center">
-          <p className="font-arabic text-xl opacity-90">
+          <p className="font-arabic text-xl text-white/95">
             بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيْمِ
           </p>
-          <h1 className="mt-5 font-serif text-5xl leading-tight sm:text-6xl">
+          <h1 className="cover-title mt-5 font-serif text-5xl leading-tight sm:text-6xl">
             {wedding.bride.name}
             <span className="mx-3 font-serif text-3xl font-normal italic opacity-80">
               &

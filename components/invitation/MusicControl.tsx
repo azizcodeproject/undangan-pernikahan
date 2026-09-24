@@ -57,7 +57,7 @@ export function MusicControl({
       <button
         type="button"
         onClick={onToggle}
-        className="fixed right-4 bottom-5 z-40 flex size-12 items-center justify-center rounded-full bg-jade text-white shadow-lg shadow-jade/20 transition hover:bg-jade-deep"
+        className="fixed top-[4.35rem] right-3 z-40 flex size-12 items-center justify-center rounded-full bg-jade text-white shadow-lg shadow-jade/20 transition hover:bg-jade-deep sm:top-auto sm:right-4 sm:bottom-6"
         aria-label={isPlaying ? "Jeda musik" : "Putar musik"}
       >
         {isPlaying ? <PauseGlyph /> : <PlayGlyph />}

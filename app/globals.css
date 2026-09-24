@@ -57,20 +57,24 @@ body {
 .paper-bg {
   background-color: var(--cream);
   background-image:
-    radial-gradient(circle at 12% 8%, color-mix(in srgb, var(--jade) 7%, transparent), transparent 28%),
-    radial-gradient(circle at 88% 4%, color-mix(in srgb, var(--sapphire) 8%, transparent), transparent 26%),
+    radial-gradient(circle at 12% 8%, color-mix(in srgb, var(--jade) 6%, transparent), transparent 26%),
+    radial-gradient(circle at 88% 4%, color-mix(in srgb, var(--sapphire) 7%, transparent), transparent 24%),
     url("/images/pattern.svg");
-  background-size: auto, auto, 320px;
+  background-size: auto, auto, 220px;
 }
 
 .cover-overlay {
   background:
     linear-gradient(
       to bottom,
-      rgba(15, 23, 42, 0.18) 0%,
-      rgba(23, 37, 84, 0.28) 42%,
-      rgba(15, 30, 50, 0.72) 100%
+      rgba(15, 23, 42, 0.12) 0%,
+      rgba(23, 37, 84, 0.16) 38%,
+      rgba(12, 24, 42, 0.52) 100%
     );
+}
+
+.cover-title {
+  text-shadow: 0 8px 28px rgba(15, 23, 42, 0.35);
 }
 
 .reveal-hidden {
