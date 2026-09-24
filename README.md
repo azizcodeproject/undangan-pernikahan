@@ -97,4 +97,4 @@ public/images/       # fallback foto
 
 ## Desain
 
-Palet jade (`#0F766E`, aksen `#14B8A6`) dan safir (`#1E3A8A`, aksen `#2563EB`) diatur sebagai CSS variable. Latar ivory/cream, heading Playfair Display, body Source Sans 3. Aksen geometris Islami hanya di bagian ayat Al-Qur'an; bagian lain memakai tipografi modern yang tenang.
+Palet jade (`#0F766E`, aksen `#14B8A6`) dan safir (`#1E3A8A`, aksen `#2563EB`) diatur sebagai CSS variable. Latar ivory/cream, heading Playfair Display, body Source Sans 3. Tampilan keseluruhan adalah undangan kontemporer (foto, kartu lembut, banyak ruang kosong) — bukan template religi. Ayat Al-Qur'an hanya muncul di satu bagian khusus, tanpa ornament geometris di sampul atau section lain.

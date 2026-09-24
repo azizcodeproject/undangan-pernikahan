@@ -22,9 +22,9 @@ export function EventSection({ wedding }: EventSectionProps) {
   return (
     <section id="acara" className="px-5 py-16 sm:py-20">
       <SectionHeading
-        eyebrow="InsyaAllah"
+        eyebrow="Jadwal"
         title="Detail Acara"
-        description="Kami menantikan kehadiran Anda di dua momen yang kami jaga dengan khidmat."
+        description="Kami menantikan kehadiran Anda di dua momen yang kami jaga dengan hangat."
       />
 
       {countdown ? (

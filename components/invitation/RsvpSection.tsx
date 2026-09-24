@@ -6,7 +6,7 @@ import { SectionHeading } from "@/components/invitation/SectionHeading";
 import type { AttendanceStatus } from "@/lib/types";
 
 const attendanceOptions: { value: AttendanceStatus; label: string }[] = [
-  { value: "yes", label: "InsyaAllah hadir" },
+  { value: "yes", label: "Akan hadir" },
   { value: "maybe", label: "Belum bisa pastikan" },
   { value: "no", label: "Mohon maaf, berhalangan" },
 ];

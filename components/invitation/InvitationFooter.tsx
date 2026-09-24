@@ -16,7 +16,7 @@ export function InvitationFooter({ wedding }: InvitationFooterProps) {
         {wedding.closingLine}
       </p>
       <p className="mt-8 text-xs tracking-[0.18em] text-muted uppercase">
-        Mohon doa restu
+        Terima kasih sudah datang
       </p>
     </footer>
   );

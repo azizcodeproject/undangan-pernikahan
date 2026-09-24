@@ -10,8 +10,8 @@
     "parents": "Putra dari Bapak Ibrahim & Ibu Khadijah"
   },
   "tagline": "Undangan Pernikahan",
-  "openingLine": "Dengan memohon rahmat dan ridho Allah SWT, kami mengundang Bapak/Ibu/Saudara/i untuk hadir dan memberikan doa restu pada hari bahagia kami.",
-  "closingLine": "Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir. Semoga Allah SWT membalas kebaikan Anda dengan keberkahan yang berlimpah.",
+  "openingLine": "Dengan penuh sukacita, kami mengundang Bapak/Ibu/Saudara/i untuk hadir dan merayakan hari bahagia kami.",
+  "closingLine": "Kehadiran dan ucapan Anda adalah hadiah yang paling berarti. Terima kasih sudah menempuh jalan ke hari kami.",
   "coverImage": "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1600&q=80",
   "couplePortrait": "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=1200&q=80",
   "weddingDate": "2026-12-12T09:00:00+07:00",
@@ -44,25 +44,25 @@
       "id": "pertemuan",
       "dateLabel": "2019",
       "title": "Pertemuan yang tak disangka",
-      "body": "Kami bertemu di majelis kajian kampus. Obrolan soal buku, keluarga, dan cita-cita ternyata menuntun kami pada rasa nyaman yang pelan-pelan tumbuh."
+      "body": "Kami bertemu di kampus. Obrolan soal buku, keluarga, dan cita-cita ternyata menuntun kami pada rasa nyaman yang pelan-pelan tumbuh."
     },
     {
-      "id": "taaruf",
+      "id": "dekat",
       "dateLabel": "2023",
-      "title": "Ta'aruf yang diberkahi",
-      "body": "Dengan doa orang tua dan restu keluarga, kami menempuh ta'aruf. Bukan drama, melainkan percakapan jujur tentang kesiapan membangun rumah tangga."
+      "title": "Semakin dekat",
+      "body": "Bukan drama. Hanya percakapan jujur tentang kesiapan membangun rumah tangga, dengan restu kedua keluarga."
     },
     {
       "id": "lamaran",
       "dateLabel": "2025",
       "title": "Lamaran di rumah",
-      "body": "Di ruang tamu yang hangat, kedua keluarga bertemu. Ada air mata haru, ada tawa, dan ada janji untuk menjaga amanah ini bersama."
+      "body": "Di ruang tamu yang hangat, kedua keluarga bertemu. Ada air mata haru, ada tawa, dan ada janji untuk menjaga satu sama lain."
     },
     {
-      "id": "menuju-halal",
+      "id": "hari-bahagia",
       "dateLabel": "2026",
       "title": "Menuju hari yang dinanti",
-      "body": "Inilah undangan kami: semoga langkah menuju pelaminan ini diliputi keberkahan, dan kehadiran Anda menjadi bagian dari doa yang kami simpan."
+      "body": "Inilah undangan kami. Kehadiran Anda membuat hari ini terasa lebih lengkap."
     }
   ],
   "quran": [

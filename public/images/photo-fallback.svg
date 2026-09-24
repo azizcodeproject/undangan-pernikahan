@@ -1,9 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="800" height="1000" viewBox="0 0 800 1000" fill="none">
   <rect width="800" height="1000" fill="#F3EEE4"/>
-  <rect x="40" y="40" width="720" height="920" rx="28" stroke="#0F766E" stroke-opacity="0.25"/>
-  <g transform="translate(340 410)" stroke="#1E3A8A" stroke-width="1.6" fill="none" opacity="0.5">
-    <rect x="10" y="10" width="100" height="100"/>
-    <rect x="10" y="10" width="100" height="100" transform="rotate(45 60 60)"/>
-  </g>
-  <text x="400" y="580" text-anchor="middle" fill="#6D645A" font-family="Georgia, serif" font-size="28">Momen bersama</text>
+  <rect x="40" y="40" width="720" height="920" rx="28" stroke="#0F766E" stroke-opacity="0.22"/>
+  <text x="400" y="510" text-anchor="middle" fill="#6D645A" font-family="Georgia, serif" font-size="32">Yusuf &amp; Sintia</text>
 </svg>
