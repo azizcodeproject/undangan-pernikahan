@@ -455,6 +455,11 @@ function WeddingEditor() {
         onChange={(value) => setWedding({ ...wedding, weddingDate: value })}
       />
       <TextField
+        label="Gambar sampul (URL atau path)"
+        value={wedding.coverImage}
+        onChange={(value) => setWedding({ ...wedding, coverImage: value })}
+      />
+      <TextField
         label="URL musik YouTube (opsional)"
         value={wedding.music.youtubeUrl}
         onChange={(value) =>
