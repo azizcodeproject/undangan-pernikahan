@@ -1,0 +1,23 @@
+[
+  {
+    "id": "msg-1",
+    "name": "Keluarga Besar Rahman",
+    "message": "Barakallahu lakuma wa baraka alaikuma wa jama'a bainakuma fi khair. Semoga menjadi keluarga yang sakinah, mawaddah, warahmah.",
+    "approved": true,
+    "createdAt": "2026-09-01T10:15:00+07:00"
+  },
+  {
+    "id": "msg-2",
+    "name": "Nurul & Fajar",
+    "message": "Selamat menempuh hidup baru, Aisyah dan Yusuf. Semoga rumah tangganya selalu diliputi keberkahan dan kesabaran.",
+    "approved": true,
+    "createdAt": "2026-09-08T19:40:00+07:00"
+  },
+  {
+    "id": "msg-3",
+    "name": "Ibu Siti Aminah",
+    "message": "Nak, Ibu doakan pernikahan ini menjadi ibadah yang indah. Jaga satu sama lain, dan jangan lupa pulang.",
+    "approved": true,
+    "createdAt": "2026-09-14T08:05:00+07:00"
+  }
+]

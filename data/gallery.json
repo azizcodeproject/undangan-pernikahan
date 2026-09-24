@@ -1,0 +1,38 @@
+[
+  {
+    "id": "momen-1",
+    "src": "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=1200&q=80",
+    "caption": "Hiasan pelaminan yang tenang, tanpa berlebihan.",
+    "order": 0
+  },
+  {
+    "id": "momen-2",
+    "src": "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?auto=format&fit=crop&w=1200&q=80",
+    "caption": "Meja tamu yang kami siapkan dengan doa.",
+    "order": 1
+  },
+  {
+    "id": "momen-3",
+    "src": "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=1200&q=80",
+    "caption": "Langkah pelan menuju hari yang sama.",
+    "order": 2
+  },
+  {
+    "id": "momen-4",
+    "src": "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1200&q=80",
+    "caption": "Senyum yang kami simpan untuk keluarga.",
+    "order": 3
+  },
+  {
+    "id": "momen-5",
+    "src": "https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?auto=format&fit=crop&w=1200&q=80",
+    "caption": "Cincin sebagai tanda amanah.",
+    "order": 4
+  },
+  {
+    "id": "momen-6",
+    "src": "https://images.unsplash.com/photo-1478146896981-b80fe463b330?auto=format&fit=crop&w=1200&q=80",
+    "caption": "Rangkaian bunga ivory di senja yang lembut.",
+    "order": 5
+  }
+]

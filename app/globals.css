@@ -1,0 +1,136 @@
+@import "tailwindcss";
+
+:root {
+  --jade: #0f766e;
+  --jade-soft: #14b8a6;
+  --jade-deep: #115e59;
+  --sapphire: #1e3a8a;
+  --sapphire-soft: #2563eb;
+  --sapphire-deep: #172554;
+  --cream: #faf6f0;
+  --ivory: #f3eee4;
+  --sand: #e7dccb;
+  --ink: #2c261f;
+  --muted: #6d645a;
+  --card: #fffdf8;
+  --line: #d8cfc0;
+}
+
+@theme inline {
+  --color-jade: var(--jade);
+  --color-jade-soft: var(--jade-soft);
+  --color-jade-deep: var(--jade-deep);
+  --color-sapphire: var(--sapphire);
+  --color-sapphire-soft: var(--sapphire-soft);
+  --color-sapphire-deep: var(--sapphire-deep);
+  --color-cream: var(--cream);
+  --color-ivory: var(--ivory);
+  --color-sand: var(--sand);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-card: var(--card);
+  --color-line: var(--line);
+  --font-serif: var(--font-playfair);
+  --font-sans: var(--font-source);
+  --font-arabic: var(--font-amiri);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--cream);
+  color: var(--ink);
+  font-family: var(--font-source), "Segoe UI", sans-serif;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--jade) 22%, white);
+  color: var(--sapphire-deep);
+}
+
+.font-arabic {
+  font-family: var(--font-amiri), "Traditional Arabic", serif;
+}
+
+.paper-bg {
+  background-color: var(--cream);
+  background-image:
+    radial-gradient(circle at 12% 8%, color-mix(in srgb, var(--jade) 7%, transparent), transparent 28%),
+    radial-gradient(circle at 88% 4%, color-mix(in srgb, var(--sapphire) 8%, transparent), transparent 26%),
+    url("/images/pattern.svg");
+  background-size: auto, auto, 320px;
+}
+
+.cover-overlay {
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(15, 23, 42, 0.18) 0%,
+      rgba(23, 37, 84, 0.28) 42%,
+      rgba(15, 30, 50, 0.72) 100%
+    );
+}
+
+.reveal-hidden {
+  opacity: 0;
+  transform: translateY(18px);
+}
+
+.reveal-visible {
+  opacity: 1;
+  transform: translateY(0);
+  transition:
+    opacity 0.75s ease,
+    transform 0.75s ease;
+}
+
+.cover-panel {
+  transition:
+    transform 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.7s ease;
+}
+
+.cover-panel.is-open {
+  transform: translateY(-108%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.eq-bar {
+  transform-origin: center bottom;
+  animation: eq-pulse 1s ease-in-out infinite;
+}
+
+.eq-bar:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.eq-bar:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+@keyframes eq-pulse {
+  0%,
+  100% {
+    transform: scaleY(0.45);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes soft-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--jade-soft) 45%, transparent);
+  }
+  70% {
+    box-shadow: 0 0 0 14px transparent;
+  }
+}
+
+.cta-pulse {
+  animation: soft-pulse 2.4s ease-out infinite;
+}
