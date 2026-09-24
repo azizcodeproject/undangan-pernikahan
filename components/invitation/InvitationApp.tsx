@@ -19,16 +19,17 @@ type InvitationAppProps = {
   wedding: WeddingContent;
   gallery: GalleryItem[];
   messages: GuestbookMessage[];
+  guestName: string;
 };
 
 export function InvitationApp({
   wedding,
   gallery,
   messages,
+  guestName,
 }: InvitationAppProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
-  const guestName = useGuestName();
 
   useEffect(() => {
     document.body.style.overflow = isOpen ? "" : "hidden";
@@ -71,15 +72,4 @@ export function InvitationApp({
       <InvitationFooter wedding={wedding} />
     </div>
   );
-}
-
-function useGuestName(): string {
-  const [guestName, setGuestName] = useState("");
-
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    setGuestName(params.get("to")?.trim() || "");
-  }, []);
-
-  return guestName;
 }

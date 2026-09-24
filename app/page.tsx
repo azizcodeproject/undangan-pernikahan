@@ -13,7 +13,17 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default async function HomePage() {
+type HomePageProps = {
+  searchParams: Promise<{ to?: string | string[] }>;
+};
+
+function readGuestName(value: string | string[] | undefined): string {
+  const rawValue = Array.isArray(value) ? value[0] : value;
+  return rawValue?.trim() || "";
+}
+
+export default async function HomePage({ searchParams }: HomePageProps) {
+  const params = await searchParams;
   const [wedding, gallery, messages] = await Promise.all([
     readWedding(),
     readGallery(),
@@ -29,6 +39,7 @@ export default async function HomePage() {
       wedding={wedding}
       gallery={gallery}
       messages={approvedMessages}
+      guestName={readGuestName(params.to)}
     />
   );
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useEffect, useState } from "react";
+import Link from "next/link";
 import { SmartImage } from "@/components/invitation/SmartImage";
 import { formatDateTime } from "@/lib/format";
 import type {
@@ -95,12 +96,12 @@ export function AdminApp() {
           <h1 className="font-serif text-3xl text-sapphire-deep">CMS Undangan</h1>
         </div>
         <div className="flex gap-2">
-          <a
+          <Link
             href="/"
             className="rounded-full border border-line px-4 py-2 text-sm text-ink"
           >
             Lihat undangan
-          </a>
+          </Link>
           <button
             type="button"
             onClick={handleLogout}

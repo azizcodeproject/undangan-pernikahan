@@ -24,15 +24,17 @@ export function Lightbox({
       return;
     }
 
+    const currentIndex = activeIndex;
+
     function onKeyDown(event: KeyboardEvent) {
       if (event.key === "Escape") {
         onClose();
       }
       if (event.key === "ArrowRight") {
-        onChange((activeIndex + 1) % items.length);
+        onChange((currentIndex + 1) % items.length);
       }
       if (event.key === "ArrowLeft") {
-        onChange((activeIndex - 1 + items.length) % items.length);
+        onChange((currentIndex - 1 + items.length) % items.length);
       }
     }
 
