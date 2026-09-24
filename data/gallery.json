@@ -1,0 +1,38 @@
+[
+  {
+    "id": "momen-1",
+    "src": "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=1200&q=80",
+    "caption": "Hiasan pelaminan yang tenang, tanpa berlebihan.",
+    "order": 0
+  },
+  {
+    "id": "momen-2",
+    "src": "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?auto=format&fit=crop&w=1200&q=80",
+    "caption": "Meja tamu yang kami siapkan pelan-pelan.",
+    "order": 1
+  },
+  {
+    "id": "momen-3",
+    "src": "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=1200&q=80",
+    "caption": "Langkah pelan menuju hari yang sama.",
+    "order": 2
+  },
+  {
+    "id": "momen-4",
+    "src": "https://images.unsplash.com/photo-1490750967868-88aa4486c946?auto=format&fit=crop&w=1200&q=80",
+    "caption": "Rangkaian bunga yang kami pilih pelan-pelan.",
+    "order": 3
+  },
+  {
+    "id": "momen-5",
+    "src": "https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?auto=format&fit=crop&w=1200&q=80",
+    "caption": "Cincin sebagai tanda amanah.",
+    "order": 4
+  },
+  {
+    "id": "momen-6",
+    "src": "https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&w=1200&q=80",
+    "caption": "Hari yang kami nantikan, tanpa banyak basa-basi.",
+    "order": 5
+  }
+]

@@ -1,0 +1,18 @@
+[
+  {
+    "id": "rsvp-1",
+    "name": "Keluarga Besar Rahman",
+    "attendance": "yes",
+    "guestCount": 4,
+    "message": "Kami hadir, Yusuf & Sintia. Sampai ketemu di acaranya.",
+    "createdAt": "2026-09-01T10:20:00+07:00"
+  },
+  {
+    "id": "rsvp-2",
+    "name": "Nurul Hasanah",
+    "attendance": "maybe",
+    "guestCount": 2,
+    "message": "Sedang menyesuaikan jadwal dinas. Kami usahakan datang.",
+    "createdAt": "2026-09-08T19:45:00+07:00"
+  }
+]
