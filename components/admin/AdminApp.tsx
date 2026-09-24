@@ -571,7 +571,8 @@ function GuestInbox() {
     } catch {
       setStatusText(networkFailureMessage);
     } finally {
-      setPendingDeleteKey("");
+      const deleteKey = `${options.endpoint}:${options.id}`;
+      setPendingDeleteKey((current) => (current === deleteKey ? "" : current));
     }
   }
 
@@ -621,7 +622,7 @@ function GuestInbox() {
                     <td className="py-2 pr-3">{entry.guestCount}</td>
                     <td className="py-2">
                       <DeleteButton
-                        disabled={pendingDeleteKey === `/api/rsvp:${entry.id}`}
+                        disabled={pendingDeleteKey !== ""}
                         onClick={() => void handleDeleteRsvp(entry.id)}
                       />
                     </td>
@@ -639,7 +640,7 @@ function GuestInbox() {
                 <div className="flex items-start justify-between gap-3">
                   <p className="font-medium text-ink">{entry.name}</p>
                   <DeleteButton
-                    disabled={pendingDeleteKey === `/api/messages:${entry.id}`}
+                    disabled={pendingDeleteKey !== ""}
                     onClick={() => void handleDeleteMessage(entry.id)}
                   />
                 </div>
