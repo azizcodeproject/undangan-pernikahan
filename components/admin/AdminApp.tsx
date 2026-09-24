@@ -425,6 +425,26 @@ function WeddingEditor() {
             })
           }
         />
+        <TextField
+          label="Orang tua mempelai wanita"
+          value={wedding.bride.parents}
+          onChange={(value) =>
+            setWedding({
+              ...wedding,
+              bride: { ...wedding.bride, parents: value },
+            })
+          }
+        />
+        <TextField
+          label="Orang tua mempelai pria"
+          value={wedding.groom.parents}
+          onChange={(value) =>
+            setWedding({
+              ...wedding,
+              groom: { ...wedding.groom, parents: value },
+            })
+          }
+        />
       </div>
       <TextField
         label="Tanggal & waktu (ISO)"
