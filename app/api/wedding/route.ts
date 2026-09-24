@@ -1,5 +1,6 @@
 import { revalidatePath } from "next/cache";
 import { cmsUnauthorizedResponse, requireCmsAuth } from "@/lib/auth";
+import { storageFailureResponse } from "@/lib/http-error";
 import { readWedding, writeWedding } from "@/lib/store";
 import type { WeddingContent } from "@/lib/types";
 
@@ -27,8 +28,12 @@ export async function PUT(request: Request) {
     );
   }
 
-  await writeWedding(body.wedding);
-  revalidatePath("/");
-  revalidatePath("/admin");
-  return Response.json({ wedding: body.wedding });
+  try {
+    await writeWedding(body.wedding);
+    revalidatePath("/");
+    revalidatePath("/admin");
+    return Response.json({ wedding: body.wedding });
+  } catch (error) {
+    return storageFailureResponse(error);
+  }
 }

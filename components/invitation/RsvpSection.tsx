@@ -3,6 +3,7 @@
 import { FormEvent, useState } from "react";
 import { Reveal } from "@/components/invitation/Reveal";
 import { SectionHeading } from "@/components/invitation/SectionHeading";
+import { networkFailureMessage, readApiErrorMessage } from "@/lib/form-feedback";
 import type { AttendanceStatus } from "@/lib/types";
 
 const attendanceOptions: { value: AttendanceStatus; label: string }[] = [
@@ -35,10 +36,13 @@ export function RsvpSection() {
           message: message.trim(),
         }),
       });
-      const payload = (await response.json()) as { error?: string };
-
       if (!response.ok) {
-        setStatusText(payload.error || "Konfirmasi belum tersimpan. Coba lagi ya.");
+        setStatusText(
+          await readApiErrorMessage(
+            response,
+            "Konfirmasi belum tersimpan. Coba lagi ya.",
+          ),
+        );
         return;
       }
 
@@ -48,7 +52,7 @@ export function RsvpSection() {
       setGuestCount(1);
       setAttendance("yes");
     } catch {
-      setStatusText("Jaringan sedang tersendat. Mohon coba beberapa saat lagi.");
+      setStatusText(networkFailureMessage);
     } finally {
       setIsSubmitting(false);
     }

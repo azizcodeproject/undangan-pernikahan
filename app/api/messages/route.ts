@@ -1,5 +1,6 @@
 import { revalidatePath } from "next/cache";
 import { requireCmsAuth } from "@/lib/auth";
+import { storageFailureResponse } from "@/lib/http-error";
 import { appendMessage, readMessages } from "@/lib/store";
 import type { GuestbookMessage } from "@/lib/types";
 
@@ -47,8 +48,12 @@ export async function POST(request: Request) {
     createdAt: new Date().toISOString(),
   };
 
-  await appendMessage(entry);
-  revalidatePath("/");
-  revalidatePath("/admin");
-  return Response.json({ message: entry });
+  try {
+    await appendMessage(entry);
+    revalidatePath("/");
+    revalidatePath("/admin");
+    return Response.json({ message: entry });
+  } catch (error) {
+    return storageFailureResponse(error);
+  }
 }

@@ -3,6 +3,10 @@
 import { FormEvent, useState } from "react";
 import { Reveal } from "@/components/invitation/Reveal";
 import { SectionHeading } from "@/components/invitation/SectionHeading";
+import {
+  networkFailureMessage,
+  serverParseFailureMessage,
+} from "@/lib/form-feedback";
 import type { GuestbookMessage } from "@/lib/types";
 
 type GuestbookSectionProps = {
@@ -27,13 +31,25 @@ export function GuestbookSection({ initialMessages }: GuestbookSectionProps) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name: name.trim(), message: message.trim() }),
       });
-      const payload = (await response.json()) as {
-        error?: string;
-        message?: GuestbookMessage;
-      };
+      let payload: { error?: string; message?: GuestbookMessage };
+      try {
+        payload = (await response.json()) as {
+          error?: string;
+          message?: GuestbookMessage;
+        };
+      } catch {
+        setStatusText(
+          response.ok
+            ? "Pesan belum tersimpan. Coba lagi ya."
+            : serverParseFailureMessage,
+        );
+        return;
+      }
 
       if (!response.ok || !payload.message) {
-        setStatusText(payload.error || "Pesan belum tersimpan. Coba lagi ya.");
+        setStatusText(
+          payload.error || "Pesan belum tersimpan. Coba lagi ya.",
+        );
         return;
       }
 
@@ -42,7 +58,7 @@ export function GuestbookSection({ initialMessages }: GuestbookSectionProps) {
       setMessage("");
       setStatusText("Pesan Anda sudah kami baca. Terima kasih.");
     } catch {
-      setStatusText("Jaringan sedang tersendat. Mohon coba beberapa saat lagi.");
+      setStatusText(networkFailureMessage);
     } finally {
       setIsSubmitting(false);
     }

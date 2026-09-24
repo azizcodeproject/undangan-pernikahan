@@ -3,6 +3,7 @@
 import { FormEvent, useEffect, useState } from "react";
 import Link from "next/link";
 import { SmartImage } from "@/components/invitation/SmartImage";
+import { readApiErrorMessage } from "@/lib/form-feedback";
 import { formatDateTime } from "@/lib/format";
 import type {
   GalleryItem,
@@ -164,7 +165,12 @@ function GalleryManager() {
       body: JSON.stringify({ items: nextItems }),
     });
     if (!response.ok) {
-      setStatusText("Perubahan galeri belum tersimpan.");
+      setStatusText(
+        await readApiErrorMessage(
+          response,
+          "Perubahan galeri belum tersimpan.",
+        ),
+      );
       return;
     }
     setStatusText("Galeri sudah diperbarui.");
@@ -370,7 +376,7 @@ function WeddingEditor() {
     setStatusText(
       response.ok
         ? "Data undangan sudah disimpan."
-        : "Penyimpanan belum berhasil.",
+        : await readApiErrorMessage(response, "Penyimpanan belum berhasil."),
     );
   }
 

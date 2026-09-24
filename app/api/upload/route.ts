@@ -1,6 +1,6 @@
-import { promises as fs } from "fs";
-import path from "path";
 import { cmsUnauthorizedResponse, requireCmsAuth } from "@/lib/auth";
+import { writePublicAsset } from "@/lib/data-store";
+import { storageFailureResponse } from "@/lib/http-error";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -41,13 +41,13 @@ export async function POST(request: Request) {
     );
   }
 
-  const uploadDirectory = path.join(process.cwd(), "public", "uploads");
-  await fs.mkdir(uploadDirectory, { recursive: true });
-
-  const safeStamp = Date.now();
-  const fileName = `${safeStamp}${extension}`;
+  const fileName = `${Date.now()}${extension}`;
   const buffer = Buffer.from(await file.arrayBuffer());
-  await fs.writeFile(path.join(uploadDirectory, fileName), buffer);
 
-  return Response.json({ src: `/uploads/${fileName}` });
+  try {
+    const src = await writePublicAsset(fileName, buffer, file.type);
+    return Response.json({ src });
+  } catch (error) {
+    return storageFailureResponse(error);
+  }
 }

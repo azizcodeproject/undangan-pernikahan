@@ -1,5 +1,6 @@
 import { revalidatePath } from "next/cache";
 import { cmsUnauthorizedResponse, requireCmsAuth } from "@/lib/auth";
+import { storageFailureResponse } from "@/lib/http-error";
 import { readGallery, writeGallery } from "@/lib/store";
 import type { GalleryItem } from "@/lib/types";
 
@@ -34,9 +35,13 @@ export async function POST(request: Request) {
     order: items.length,
   };
   items.push(nextItem);
-  await writeGallery(items);
-  revalidateInvitation();
-  return Response.json({ item: nextItem, items });
+  try {
+    await writeGallery(items);
+    revalidateInvitation();
+    return Response.json({ item: nextItem, items });
+  } catch (error) {
+    return storageFailureResponse(error);
+  }
 }
 
 export async function PUT(request: Request) {
@@ -64,9 +69,13 @@ export async function PUT(request: Request) {
       order: index,
     }));
 
-  await writeGallery(sanitized);
-  revalidateInvitation();
-  return Response.json({ items: sanitized });
+  try {
+    await writeGallery(sanitized);
+    revalidateInvitation();
+    return Response.json({ items: sanitized });
+  } catch (error) {
+    return storageFailureResponse(error);
+  }
 }
 
 function revalidateInvitation() {

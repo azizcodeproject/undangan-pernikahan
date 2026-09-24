@@ -1,5 +1,6 @@
 import { revalidatePath } from "next/cache";
 import { requireCmsAuth, cmsUnauthorizedResponse } from "@/lib/auth";
+import { storageFailureResponse } from "@/lib/http-error";
 import { appendRsvp, readRsvps } from "@/lib/store";
 import type { AttendanceStatus, RsvpEntry } from "@/lib/types";
 
@@ -57,8 +58,12 @@ export async function POST(request: Request) {
     createdAt: new Date().toISOString(),
   };
 
-  await appendRsvp(entry);
-  revalidatePath("/");
-  revalidatePath("/admin");
-  return Response.json({ entry });
+  try {
+    await appendRsvp(entry);
+    revalidatePath("/");
+    revalidatePath("/admin");
+    return Response.json({ entry });
+  } catch (error) {
+    return storageFailureResponse(error);
+  }
 }
