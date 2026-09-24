@@ -1,6 +1,8 @@
 import { describe, expect, test } from "vitest";
 import {
+  buildFreshBlobUrl,
   isBlobStorageConfigured,
+  isNotFoundError,
   readJsonDocument,
   writeJsonDocument,
   writePublicAsset,
@@ -18,7 +20,14 @@ function createMemoryAdapters(options: {
 } {
   const blobPuts: Array<{ pathname: string; value: unknown }> = [];
   const fileWrites: Array<{ fileName: string; value: unknown }> = [];
-  let blobValue: unknown = options.blobValue ?? null;
+  const revisions: Array<{
+    pathname: string;
+    url: string;
+    uploadedAtMs: number;
+    value: unknown;
+  }> = [];
+  let legacyValue: unknown = options.blobValue ?? null;
+  let revisionClock = 1;
   let fileValue: unknown = options.fileValue;
 
   return {
@@ -27,15 +36,46 @@ function createMemoryAdapters(options: {
       VERCEL: options.vercel,
     },
     blob: {
-      async getJson() {
-        return blobValue;
+      async getJson(pathname) {
+        const revision = revisions.find((item) => item.pathname === pathname);
+        if (revision) {
+          return revision.value;
+        }
+        return legacyValue;
       },
       async putJson(pathname, value) {
         blobPuts.push({ pathname, value });
-        blobValue = value;
+        if (pathname.startsWith("live/")) {
+          revisions.push({
+            pathname,
+            url: `https://blob.vercel-storage.com/${pathname}`,
+            uploadedAtMs: revisionClock,
+            value,
+          });
+          revisionClock += 1;
+          return;
+        }
+        legacyValue = value;
       },
       async putFile(pathname) {
         return `https://blob.vercel-storage.com/${pathname}`;
+      },
+      async listRevisions(prefix) {
+        return revisions
+          .filter((item) => item.pathname.startsWith(prefix))
+          .map(({ pathname, url, uploadedAtMs }) => ({
+            pathname,
+            url,
+            uploadedAtMs,
+          }));
+      },
+      async deleteBlobs(urls) {
+        for (const url of urls) {
+          const index = revisions.findIndex((item) => item.url === url);
+          if (index >= 0) {
+            revisions.splice(index, 1);
+          }
+        }
       },
     },
     files: {
@@ -96,7 +136,7 @@ describe("readJsonDocument", () => {
     ]);
   });
 
-  test("jatuh ke seed JSON jika Blob belum punya dokumen", async () => {
+  test("jatuh ke seed JSON jika Blob belum punya dokumen galeri", async () => {
     const adapters = createMemoryAdapters({
       token: "vercel_blob_rw_test",
       blobValue: null,
@@ -106,6 +146,69 @@ describe("readJsonDocument", () => {
     await expect(readJsonDocument("gallery.json", adapters)).resolves.toEqual([
       { id: "seed-1" },
     ]);
+  });
+
+  test("pesan dan RSVP kosong jika Blob belum punya dokumen", async () => {
+    const adapters = createMemoryAdapters({
+      token: "vercel_blob_rw_test",
+      blobValue: null,
+      fileValue: [{ id: "seed-1" }],
+    });
+
+    await expect(readJsonDocument("messages.json", adapters)).resolves.toEqual(
+      [],
+    );
+    await expect(readJsonDocument("rsvp.json", adapters)).resolves.toEqual([]);
+  });
+
+  test("refresh membaca revisi terbaru, bukan salinan lama", async () => {
+    const adapters = createMemoryAdapters({
+      token: "vercel_blob_rw_test",
+      blobValue: [{ id: "lama" }],
+    });
+
+    await writeJsonDocument("messages.json", [{ id: "baru" }], adapters);
+
+    await expect(readJsonDocument("messages.json", adapters)).resolves.toEqual([
+      { id: "baru" },
+    ]);
+  });
+
+  test("array kosong di Blob tidak diganti data contoh", async () => {
+    const adapters = createMemoryAdapters({
+      token: "vercel_blob_rw_test",
+      blobValue: [],
+      fileValue: [{ id: "seed-1" }],
+    });
+
+    await expect(readJsonDocument("messages.json", adapters)).resolves.toEqual(
+      [],
+    );
+  });
+});
+
+describe("isNotFoundError", () => {
+  test("mengenali blob yang sudah dihapus", () => {
+    expect(
+      isNotFoundError(
+        new Error("Vercel Blob: The requested blob does not exist"),
+      ),
+    ).toBe(true);
+    expect(isNotFoundError({ name: "BlobNotFoundError" })).toBe(true);
+    expect(isNotFoundError(new Error("token invalid"))).toBe(false);
+  });
+});
+
+describe("buildFreshBlobUrl", () => {
+  test("menambah versi agar bacaan tidak memakai salinan cache", () => {
+    expect(
+      buildFreshBlobUrl(
+        "https://example.public.blob.vercel-storage.com/live/messages.json",
+        1710000000000,
+      ),
+    ).toBe(
+      "https://example.public.blob.vercel-storage.com/live/messages.json?v=1710000000000",
+    );
   });
 });
 
@@ -134,7 +237,10 @@ describe("writeJsonDocument", () => {
     await writeJsonDocument("rsvp.json", nextValue, adapters);
 
     expect(adapters.blobPuts).toEqual([
-      { pathname: "data/rsvp.json", value: nextValue },
+      {
+        pathname: expect.stringMatching(/^live\/rsvp\/\d+-[0-9a-f-]+\.json$/),
+        value: nextValue,
+      },
     ]);
     expect(adapters.fileWrites).toEqual([]);
   });

@@ -76,7 +76,7 @@ Jika `BLOB_READ_WRITE_TOKEN` kosong, API membaca/menulis `data/*.json` di disk. 
 
 Tanpa token di Vercel, API tulis mengembalikan `503` dengan pesan bahwa Blob belum dikonfigurasi — bukan lagi error jaringan yang kabur.
 
-Baca pertama kali: jika Blob belum punya dokumen, API memakai seed `data/*.json` yang di-commit. Setelah ada tulisan pertama, **Blob menjadi sumber kebenaran** untuk dokumen itu. Mengubah JSON di repo tidak mengubah data produksi yang sudah tersimpan; sunting lewat CMS `/admin`, atau hapus blob `data/*.json` di dashboard Blob jika ingin seed dipakai lagi.
+Baca pertama kali: jika Blob belum punya dokumen galeri atau data acara, API memakai seed `data/wedding.json` dan `data/gallery.json`. Pesan dan RSVP di produksi tidak mengambil data contoh itu. Setiap kiriman disimpan sebagai berkas baru di `live/messages/` atau `live/rsvp/`, jadi refresh langsung melihat data terbaru. Menimpa satu berkas publik yang sama membuat Vercel menyajikan salinan lama sampai sekitar satu menit.
 
 ## Deploy ke Vercel (situs publik, repo bisa privat)
 

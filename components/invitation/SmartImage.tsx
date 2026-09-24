@@ -15,17 +15,18 @@ export function SmartImage({
   fallbackSrc = "/images/photo-fallback.svg",
   className,
 }: SmartImageProps) {
-  const [currentSrc, setCurrentSrc] = useState(src);
+  const [failedSrc, setFailedSrc] = useState<string | null>(null);
+  const visibleSrc = failedSrc === src ? fallbackSrc : src;
 
   return (
     // eslint-disable-next-line @next/next/no-img-element
     <img
-      src={currentSrc}
+      src={visibleSrc}
       alt={alt}
       className={className}
       onError={() => {
-        if (currentSrc !== fallbackSrc) {
-          setCurrentSrc(fallbackSrc);
+        if (visibleSrc !== fallbackSrc) {
+          setFailedSrc(src);
         }
       }}
     />

@@ -59,6 +59,7 @@ export function Lightbox({
         onClick={(event) => event.stopPropagation()}
       >
         <SmartImage
+          key={activeItem.id}
           src={activeItem.src}
           alt={activeItem.caption}
           className="max-h-[78vh] w-full rounded-2xl object-contain"
