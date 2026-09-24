@@ -487,6 +487,18 @@ function WeddingEditor() {
               setWedding({ ...wedding, events });
             }}
           />
+          <div className="md:col-span-2">
+            <TextField
+              label="Alamat jalan"
+              value={event.address}
+              onChange={(value) => {
+                const events = wedding.events.map((entry, eventIndex) =>
+                  eventIndex === index ? { ...entry, address: value } : entry,
+                );
+                setWedding({ ...wedding, events });
+              }}
+            />
+          </div>
           <TextField
             label="Tautan peta"
             value={event.mapsUrl}
