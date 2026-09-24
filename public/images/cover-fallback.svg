@@ -7,10 +7,5 @@
       <stop offset="100%" stop-color="#172554"/>
     </radialGradient>
   </defs>
-  <g transform="translate(520 720)" stroke="#F3EEE4" stroke-width="2" fill="none" opacity="0.55">
-    <rect x="20" y="20" width="120" height="120"/>
-    <rect x="20" y="20" width="120" height="120" transform="rotate(45 80 80)"/>
-    <circle cx="80" cy="80" r="88"/>
-  </g>
-  <text x="600" y="980" text-anchor="middle" fill="#FAF6F0" font-family="Georgia, serif" font-size="54">Aisyah &amp; Yusuf</text>
+  <text x="600" y="980" text-anchor="middle" fill="#FAF6F0" font-family="Georgia, serif" font-size="54">Yusuf &amp; Sintia</text>
 </svg>

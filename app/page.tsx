@@ -8,7 +8,7 @@ export const dynamic = "force-dynamic";
 export async function generateMetadata(): Promise<Metadata> {
   const wedding = await readWedding();
   return {
-    title: `${coupleDisplayName(wedding.bride.name, wedding.groom.name)} — Undangan Pernikahan`,
+    title: `${coupleDisplayName(wedding.groom.name, wedding.bride.name)} — Undangan Pernikahan`,
     description: wedding.openingLine,
   };
 }

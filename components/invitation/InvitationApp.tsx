@@ -58,7 +58,7 @@ export function InvitationApp({
         onToggle={() => setIsPlaying((current) => !current)}
       />
       <InvitationNav
-        coupleNames={coupleDisplayName(wedding.bride.name, wedding.groom.name)}
+        coupleNames={coupleDisplayName(wedding.groom.name, wedding.bride.name)}
       />
       <main className="pb-20">
         <CoupleIntro wedding={wedding} guestName={guestName} />

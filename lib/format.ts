@@ -28,8 +28,8 @@ export function formatDateTime(isoDate: string): string {
 }
 
 export function coupleDisplayName(
-  brideName: string,
   groomName: string,
+  brideName: string,
 ): string {
-  return `${brideName} & ${groomName}`;
+  return `${groomName} & ${brideName}`;
 }

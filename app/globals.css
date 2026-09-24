@@ -58,9 +58,7 @@ body {
   background-color: var(--cream);
   background-image:
     radial-gradient(circle at 12% 8%, color-mix(in srgb, var(--jade) 6%, transparent), transparent 26%),
-    radial-gradient(circle at 88% 4%, color-mix(in srgb, var(--sapphire) 7%, transparent), transparent 24%),
-    url("/images/pattern.svg");
-  background-size: auto, auto, 220px;
+    radial-gradient(circle at 88% 4%, color-mix(in srgb, var(--sapphire) 7%, transparent), transparent 24%);
 }
 
 .cover-overlay {

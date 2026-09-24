@@ -1,4 +1,3 @@
-import { KhatamOrnament } from "@/components/invitation/Ornament";
 import { coupleDisplayName } from "@/lib/format";
 import type { WeddingContent } from "@/lib/types";
 
@@ -9,9 +8,9 @@ type InvitationFooterProps = {
 export function InvitationFooter({ wedding }: InvitationFooterProps) {
   return (
     <footer className="px-5 py-16 text-center">
-      <KhatamOrnament className="mx-auto size-10 text-jade" />
+      <span className="mx-auto block h-px w-16 bg-line" />
       <p className="mt-5 font-serif text-3xl text-sapphire-deep">
-        {coupleDisplayName(wedding.bride.name, wedding.groom.name)}
+        {coupleDisplayName(wedding.groom.name, wedding.bride.name)}
       </p>
       <p className="mx-auto mt-4 max-w-xl text-sm leading-7 text-muted">
         {wedding.closingLine}

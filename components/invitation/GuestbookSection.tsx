@@ -78,7 +78,7 @@ export function GuestbookSection({ initialMessages }: GuestbookSectionProps) {
                 value={message}
                 onChange={(event) => setMessage(event.target.value)}
                 className="rounded-2xl border border-line bg-cream px-4 py-3 outline-none focus:border-jade"
-                placeholder="Doa dan ucapan untuk Aisyah & Yusuf"
+                placeholder="Doa dan ucapan untuk Yusuf & Sintia"
               />
             </label>
             <button

@@ -1,6 +1,8 @@
-# Undangan Pernikahan Digital — Aisyah & Yusuf
+# Undangan Pernikahan Digital — Yusuf & Sintia
 
-Website undangan pernikahan Muslim yang elegan, hangat, dan mobile-first. Dibangun dengan Next.js (App Router), TypeScript, dan Tailwind CSS. Data pasangan, galeri, RSVP, dan buku tamu disimpan sebagai berkas JSON di folder `data/`.
+Website undangan pernikahan yang elegan, hangat, dan mobile-first. Dibangun dengan Next.js (App Router), TypeScript, dan Tailwind CSS agar langsung siap di-deploy ke **Vercel**. Nama produksi yang disarankan: **`yusufsintia`** → [https://yusufsintia.vercel.app](https://yusufsintia.vercel.app).
+
+Data pasangan, galeri, RSVP, dan buku tamu disimpan sebagai berkas JSON di folder `data/`.
 
 ## Menjalankan secara lokal
 
@@ -26,13 +28,13 @@ npm start
 | --- | --- | --- |
 | `CMS_PASSWORD` | `change-me` | Kata sandi halaman `/admin` |
 
-Salin `.env.example` menjadi `.env.local` lalu ganti sandinya sebelum dipakai di produksi.
+Salin `.env.example` menjadi `.env.local` lalu ganti sandinya sebelum dipakai di produksi. Di Vercel, isi variabel yang sama di Project Settings → Environment Variables (Production + Preview).
 
 ## Mengganti data pasangan
 
 Hampir semua konten undangan bisa diubah dari satu tempat:
 
-- `data/wedding.json` — nama, orang tua, ayat, cerita, tanggal, tempat, peta, path musik, dan URL YouTube opsional
+- `data/wedding.json` — nama Yusuf & Sintia, orang tua, ayat, cerita, tanggal, tempat, peta, path musik, dan URL YouTube opsional
 - `data/gallery.json` — foto momen bersama
 - `data/messages.json` — pesan buku tamu (seed + hasil form)
 - `data/rsvp.json` — konfirmasi kehadiran (seed + hasil form)
@@ -42,7 +44,7 @@ Atau sunting lewat CMS `/admin` (galeri, nama, tanggal, tempat, musik).
 Nama tamu di sampul bisa diisi lewat query string:
 
 ```
-https://domain-anda.com/?to=Keluarga%20Besar%20Rahman
+https://yusufsintia.vercel.app/?to=Keluarga%20Besar%20Rahman
 ```
 
 ## Musik latar
@@ -54,30 +56,33 @@ Ada dua sumber, dipilih otomatis:
 
 Berkas `background.mp3` adalah pad ambient prosedural untuk uji coba. Ganti dengan lagu yang Anda miliki lisensinya. Lihat `public/music/README.md`.
 
-## Penyimpanan JSON: lokal vs Vercel
+## Penyimpanan JSON di Vercel (penting)
 
-API menulis ke `data/*.json` di filesystem. Perilaku:
+API menulis ke `data/*.json` di filesystem. Itu memenuhi kebutuhan form RSVP, buku tamu, dan CMS.
 
-- **Lokal / VPS / Node host**: perubahan RSVP, pesan, dan galeri bertahan di disk.
-- **Vercel / serverless**: filesystem bersifat ephemeral. Tulisan bisa hilang saat instance berganti. Undangan tetap tampil dari JSON yang sudah di-commit.
+- **Lokal**: perubahan bertahan di disk.
+- **Vercel (serverless)**: filesystem bersifat *ephemeral*. Tulisan bisa hilang saat instance berganti. **Bacaan** tetap andal dari JSON yang sudah di-commit (seed + suntingan yang di-push).
 
-Untuk demo yang tahan lama di Vercel:
+Pendekatan praktis tanpa layanan berbayar:
 
-1. Sunting `data/wedding.json` dan `data/gallery.json` di repo, lalu deploy ulang, atau
-2. Jalankan CMS secara lokal, commit berkas JSON yang berubah, lalu push, atau
-3. Pindahkan persistensi ke database (Vercel KV / Postgres) jika undangan ini dipakai jangka panjang.
+1. Isi `data/wedding.json` dan `data/gallery.json` di repo, lalu deploy — undangan tampil utuh.
+2. Untuk RSVP/pesan yang ingin disimpan permanen: jalankan form/CMS secara lokal, commit berkas JSON yang berubah, lalu push agar Vercel men-deploy ulang.
+3. Vercel KV / Blob / Postgres hanya perlu jika undangan ini dipakai jangka panjang dan tamu menulis terus-menerus. Jangan blokir rilis hanya untuk itu.
 
-API tulis JSON tetap diimplementasikan sesuai spesifikasi.
+API tulis JSON tetap ada. Tamu tetap bisa mengirim RSVP/pesan; data itu hidup selama instance masih sama, lalu kembali ke seed yang di-commit.
 
 ## Deploy ke Vercel (situs publik, repo bisa privat)
 
-Repo GitHub yang privat tetap bisa menghasilkan situs publik.
+Repo GitHub yang privat tetap bisa menghasilkan situs publik di `yusufsintia.vercel.app`.
 
 1. Push proyek ini ke GitHub (repo boleh private).
-2. Buka [Vercel](https://vercel.com), **Add New Project**, pilih repositori.
-3. Framework terdeteksi sebagai Next.js. Build command: `npm run build`.
-4. Isi Environment Variable `CMS_PASSWORD` (jangan pakai `change-me` di produksi).
-5. Deploy. Domain `*.vercel.app` bersifat publik — tamu tidak perlu akun GitHub.
+2. Buka [Vercel](https://vercel.com) → **Add New Project** → pilih repositori ini.
+3. **Project Name:** `yusufsintia` (menghasilkan `https://yusufsintia.vercel.app`).
+4. Framework Preset: **Next.js** (terdeteksi otomatis). Build: `npm run build`. Output: default App Router, tidak perlu `vercel.json`.
+5. Environment Variables: `CMS_PASSWORD` (jangan pakai `change-me` di produksi).
+6. Deploy. Domain `*.vercel.app` bersifat publik — tamu tidak perlu akun GitHub.
+
+Custom domain (opsional) bisa ditambahkan nanti di Vercel → Project → Domains.
 
 ## Struktur penting
 
@@ -87,9 +92,9 @@ components/          # UI undangan + CMS
 data/                # sumber konten JSON
 lib/                 # baca/tulis JSON, auth CMS
 public/music/        # berkas audio
-public/images/       # aksen SVG dan fallback foto
+public/images/       # fallback foto
 ```
 
 ## Desain
 
-Palet jade (`#0F766E`, aksen `#14B8A6`) dan safir (`#1E3A8A`, aksen `#2563EB`) diatur sebagai CSS variable. Latar ivory/cream, heading Playfair Display, body Source Sans 3, ayat memakai Amiri.
+Palet jade (`#0F766E`, aksen `#14B8A6`) dan safir (`#1E3A8A`, aksen `#2563EB`) diatur sebagai CSS variable. Latar ivory/cream, heading Playfair Display, body Source Sans 3. Aksen geometris Islami hanya di bagian ayat Al-Qur'an; bagian lain memakai tipografi modern yang tenang.

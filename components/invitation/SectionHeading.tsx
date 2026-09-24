@@ -4,12 +4,14 @@ type SectionHeadingProps = {
   eyebrow: string;
   title: string;
   description?: string;
+  withOrnament?: boolean;
 };
 
 export function SectionHeading({
   eyebrow,
   title,
   description,
+  withOrnament = false,
 }: SectionHeadingProps) {
   return (
     <div className="mx-auto mb-10 max-w-2xl text-center">
@@ -20,7 +22,11 @@ export function SectionHeading({
         {title}
       </h2>
       <div className="mt-5">
-        <SectionDivider />
+        {withOrnament ? (
+          <SectionDivider />
+        ) : (
+          <span className="mx-auto block h-px w-16 bg-line" />
+        )}
       </div>
       {description ? (
         <p className="mt-5 text-[0.98rem] leading-7 text-muted">{description}</p>

@@ -22,9 +22,10 @@ const amiri = Amiri({
 });
 
 export const metadata: Metadata = {
-  title: "Aisyah & Yusuf — Undangan Pernikahan",
+  metadataBase: new URL("https://yusufsintia.vercel.app"),
+  title: "Yusuf & Sintia — Undangan Pernikahan",
   description:
-    "Dengan memohon rahmat Allah SWT, Aisyah dan Yusuf mengundang Anda untuk hadir di hari pernikahan mereka.",
+    "Dengan memohon rahmat Allah SWT, Yusuf dan Sintia mengundang Anda untuk hadir di hari pernikahan mereka.",
   icons: {
     icon: "/favicon.svg",
   },

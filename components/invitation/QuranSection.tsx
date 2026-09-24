@@ -13,6 +13,7 @@ export function QuranSection({ ayahs }: QuranSectionProps) {
         eyebrow="Al-Qur'an"
         title="Tentang Pernikahan"
         description="Kami merangkai hari ini di atas ayat yang menuntun kami untuk saling menenangkan."
+        withOrnament
       />
       <div className="mx-auto flex max-w-3xl flex-col gap-6">
         {ayahs.map((ayah) => (
