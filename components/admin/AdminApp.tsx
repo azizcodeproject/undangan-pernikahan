@@ -536,6 +536,75 @@ function WeddingEditor() {
           />
         </div>
       ))}
+      {wedding.story.map((chapter, index) => (
+        <div key={chapter.id} className="grid gap-3 rounded-2xl bg-cream p-4">
+          <div className="flex items-center justify-between gap-3">
+            <p className="font-medium text-ink">Cerita {index + 1}</p>
+            <button
+              type="button"
+              className="rounded-full border border-sapphire/20 px-3 py-1 text-sm text-sapphire"
+              onClick={() => {
+                setWedding({
+                  ...wedding,
+                  story: wedding.story.filter((_, storyIndex) => storyIndex !== index),
+                });
+              }}
+            >
+              Hapus
+            </button>
+          </div>
+          <TextField
+            label="Tahun / tanggal"
+            value={chapter.dateLabel}
+            onChange={(value) => {
+              const story = wedding.story.map((entry, storyIndex) =>
+                storyIndex === index ? { ...entry, dateLabel: value } : entry,
+              );
+              setWedding({ ...wedding, story });
+            }}
+          />
+          <TextField
+            label="Judul"
+            value={chapter.title}
+            onChange={(value) => {
+              const story = wedding.story.map((entry, storyIndex) =>
+                storyIndex === index ? { ...entry, title: value } : entry,
+              );
+              setWedding({ ...wedding, story });
+            }}
+          />
+          <TextAreaField
+            label="Isi cerita"
+            value={chapter.body}
+            onChange={(value) => {
+              const story = wedding.story.map((entry, storyIndex) =>
+                storyIndex === index ? { ...entry, body: value } : entry,
+              );
+              setWedding({ ...wedding, story });
+            }}
+          />
+        </div>
+      ))}
+      <button
+        type="button"
+        className="self-start rounded-full border border-line px-4 py-2 text-sm text-ink"
+        onClick={() => {
+          setWedding({
+            ...wedding,
+            story: [
+              ...wedding.story,
+              {
+                id: crypto.randomUUID(),
+                dateLabel: "",
+                title: "",
+                body: "",
+              },
+            ],
+          });
+        }}
+      >
+        Tambah bagian cerita
+      </button>
       <button
         type="submit"
         className="self-start rounded-full bg-sapphire px-5 py-3 text-sm font-semibold text-white"
@@ -706,6 +775,28 @@ function TextField({
     <label className="flex flex-col gap-2 text-sm">
       <span className="font-medium text-ink">{label}</span>
       <input
+        value={value}
+        onChange={(event) => onChange(event.target.value)}
+        className="rounded-2xl border border-line bg-cream px-4 py-3 outline-none focus:border-jade"
+      />
+    </label>
+  );
+}
+
+function TextAreaField({
+  label,
+  value,
+  onChange,
+}: {
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+}) {
+  return (
+    <label className="flex flex-col gap-2 text-sm">
+      <span className="font-medium text-ink">{label}</span>
+      <textarea
+        rows={4}
         value={value}
         onChange={(event) => onChange(event.target.value)}
         className="rounded-2xl border border-line bg-cream px-4 py-3 outline-none focus:border-jade"
