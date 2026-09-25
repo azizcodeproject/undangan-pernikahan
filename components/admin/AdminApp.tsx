@@ -3,6 +3,7 @@
 import { FormEvent, useEffect, useState } from "react";
 import Link from "next/link";
 import { SmartImage } from "@/components/invitation/SmartImage";
+import { SiteCredit } from "@/components/SiteCredit";
 import {
   networkFailureMessage,
   readApiErrorMessage,
@@ -88,12 +89,13 @@ export function AdminApp() {
           </button>
           {loginError ? <p className="text-sm text-sapphire">{loginError}</p> : null}
         </form>
+        <SiteCredit className="mt-10" />
       </main>
     );
   }
 
   return (
-    <main className="mx-auto min-h-dvh max-w-5xl px-4 py-8">
+    <main className="mx-auto flex min-h-dvh max-w-5xl flex-col px-4 py-8">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <p className="text-xs tracking-[0.2em] text-jade uppercase">Studio</p>
@@ -144,6 +146,7 @@ export function AdminApp() {
         {activeTab === "undangan" ? <WeddingEditor /> : null}
         {activeTab === "tamu" ? <GuestInbox /> : null}
       </div>
+      <SiteCredit className="mt-auto pt-10 pb-2" />
     </main>
   );
 }

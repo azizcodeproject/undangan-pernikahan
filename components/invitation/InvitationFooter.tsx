@@ -1,4 +1,5 @@
 import { coupleDisplayName } from "@/lib/format";
+import { SiteCredit } from "@/components/SiteCredit";
 import type { WeddingContent } from "@/lib/types";
 
 type InvitationFooterProps = {
@@ -18,6 +19,7 @@ export function InvitationFooter({ wedding }: InvitationFooterProps) {
       <p className="mt-8 text-xs tracking-[0.18em] text-muted uppercase">
         Terima kasih sudah datang
       </p>
+      <SiteCredit className="mt-10" />
     </footer>
   );
 }
