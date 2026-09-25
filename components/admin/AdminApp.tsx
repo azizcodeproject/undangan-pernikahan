@@ -479,132 +479,154 @@ function WeddingEditor() {
           })
         }
       />
-      {wedding.events.map((event, index) => (
-        <div key={event.id} className="grid gap-3 rounded-2xl bg-cream p-4 md:grid-cols-2">
-          <p className="md:col-span-2 font-medium text-ink">{event.title}</p>
-          <TextField
-            label="Tempat"
-            value={event.venue}
-            onChange={(value) => {
-              const events = wedding.events.map((entry, eventIndex) =>
-                eventIndex === index ? { ...entry, venue: value } : entry,
-              );
-              setWedding({ ...wedding, events });
-            }}
-          />
-          <div className="md:col-span-2">
+      <section className="grid gap-3 rounded-3xl border border-line bg-cream/50 p-4">
+        <div>
+          <p className="text-xs tracking-[0.18em] text-sapphire uppercase">Jadwal</p>
+          <h3 className="font-serif text-xl text-sapphire-deep">Acara & resepsi</h3>
+        </div>
+        {wedding.events.map((event, index) => (
+          <div key={event.id} className="grid gap-3 rounded-2xl border border-line bg-card p-4 md:grid-cols-2">
+            <p className="md:col-span-2 font-medium text-ink">{event.title}</p>
             <TextField
-              label="Alamat jalan"
-              value={event.address}
+              label="Tempat"
+              value={event.venue}
               onChange={(value) => {
                 const events = wedding.events.map((entry, eventIndex) =>
-                  eventIndex === index ? { ...entry, address: value } : entry,
+                  eventIndex === index ? { ...entry, venue: value } : entry,
+                );
+                setWedding({ ...wedding, events });
+              }}
+            />
+            <div className="md:col-span-2">
+              <TextField
+                label="Alamat jalan"
+                value={event.address}
+                onChange={(value) => {
+                  const events = wedding.events.map((entry, eventIndex) =>
+                    eventIndex === index ? { ...entry, address: value } : entry,
+                  );
+                  setWedding({ ...wedding, events });
+                }}
+              />
+            </div>
+            <TextField
+              label="Tautan peta"
+              value={event.mapsUrl}
+              onChange={(value) => {
+                const events = wedding.events.map((entry, eventIndex) =>
+                  eventIndex === index ? { ...entry, mapsUrl: value } : entry,
+                );
+                setWedding({ ...wedding, events });
+              }}
+            />
+            <TextField
+              label="Tanggal tampilan"
+              value={event.dateLabel}
+              onChange={(value) => {
+                const events = wedding.events.map((entry, eventIndex) =>
+                  eventIndex === index ? { ...entry, dateLabel: value } : entry,
+                );
+                setWedding({ ...wedding, events });
+              }}
+            />
+            <TextField
+              label="Waktu tampilan"
+              value={event.timeLabel}
+              onChange={(value) => {
+                const events = wedding.events.map((entry, eventIndex) =>
+                  eventIndex === index ? { ...entry, timeLabel: value } : entry,
                 );
                 setWedding({ ...wedding, events });
               }}
             />
           </div>
-          <TextField
-            label="Tautan peta"
-            value={event.mapsUrl}
-            onChange={(value) => {
-              const events = wedding.events.map((entry, eventIndex) =>
-                eventIndex === index ? { ...entry, mapsUrl: value } : entry,
-              );
-              setWedding({ ...wedding, events });
-            }}
-          />
-          <TextField
-            label="Tanggal tampilan"
-            value={event.dateLabel}
-            onChange={(value) => {
-              const events = wedding.events.map((entry, eventIndex) =>
-                eventIndex === index ? { ...entry, dateLabel: value } : entry,
-              );
-              setWedding({ ...wedding, events });
-            }}
-          />
-          <TextField
-            label="Waktu tampilan"
-            value={event.timeLabel}
-            onChange={(value) => {
-              const events = wedding.events.map((entry, eventIndex) =>
-                eventIndex === index ? { ...entry, timeLabel: value } : entry,
-              );
-              setWedding({ ...wedding, events });
-            }}
-          />
+        ))}
+      </section>
+
+      <section className="grid gap-3 rounded-3xl border border-jade/25 bg-jade/5 p-4">
+        <div>
+          <p className="text-xs tracking-[0.18em] text-jade uppercase">Perjalanan</p>
+          <h3 className="font-serif text-xl text-sapphire-deep">Cerita kita</h3>
+          <p className="mt-1 text-sm text-muted">
+            Bagian ini muncul di timeline undangan, terpisah dari jadwal acara.
+          </p>
         </div>
-      ))}
-      {wedding.story.map((chapter, index) => (
-        <div key={chapter.id} className="grid gap-3 rounded-2xl bg-cream p-4">
-          <div className="flex items-center justify-between gap-3">
-            <p className="font-medium text-ink">Cerita {index + 1}</p>
-            <button
-              type="button"
-              className="rounded-full border border-sapphire/20 px-3 py-1 text-sm text-sapphire"
-              onClick={() => {
-                setWedding({
-                  ...wedding,
-                  story: wedding.story.filter((_, storyIndex) => storyIndex !== index),
-                });
+        {wedding.story.map((chapter, index) => (
+          <div
+            key={chapter.id}
+            className="grid gap-3 rounded-2xl border border-jade/15 bg-card p-4"
+          >
+            <div className="flex items-center justify-between gap-3">
+              <p className="font-medium text-ink">Bagian cerita {index + 1}</p>
+              <button
+                type="button"
+                className="rounded-full border border-sapphire/20 px-3 py-1 text-sm text-sapphire"
+                onClick={() => {
+                  setWedding({
+                    ...wedding,
+                    story: wedding.story.filter(
+                      (_, storyIndex) => storyIndex !== index,
+                    ),
+                  });
+                }}
+              >
+                Hapus
+              </button>
+            </div>
+            <TextField
+              label="Tahun / tanggal"
+              value={chapter.dateLabel}
+              onChange={(value) => {
+                const story = wedding.story.map((entry, storyIndex) =>
+                  storyIndex === index ? { ...entry, dateLabel: value } : entry,
+                );
+                setWedding({ ...wedding, story });
               }}
-            >
-              Hapus
-            </button>
+            />
+            <TextField
+              label="Judul"
+              value={chapter.title}
+              onChange={(value) => {
+                const story = wedding.story.map((entry, storyIndex) =>
+                  storyIndex === index ? { ...entry, title: value } : entry,
+                );
+                setWedding({ ...wedding, story });
+              }}
+            />
+            <TextAreaField
+              label="Isi cerita"
+              value={chapter.body}
+              onChange={(value) => {
+                const story = wedding.story.map((entry, storyIndex) =>
+                  storyIndex === index ? { ...entry, body: value } : entry,
+                );
+                setWedding({ ...wedding, story });
+              }}
+            />
           </div>
-          <TextField
-            label="Tahun / tanggal"
-            value={chapter.dateLabel}
-            onChange={(value) => {
-              const story = wedding.story.map((entry, storyIndex) =>
-                storyIndex === index ? { ...entry, dateLabel: value } : entry,
-              );
-              setWedding({ ...wedding, story });
-            }}
-          />
-          <TextField
-            label="Judul"
-            value={chapter.title}
-            onChange={(value) => {
-              const story = wedding.story.map((entry, storyIndex) =>
-                storyIndex === index ? { ...entry, title: value } : entry,
-              );
-              setWedding({ ...wedding, story });
-            }}
-          />
-          <TextAreaField
-            label="Isi cerita"
-            value={chapter.body}
-            onChange={(value) => {
-              const story = wedding.story.map((entry, storyIndex) =>
-                storyIndex === index ? { ...entry, body: value } : entry,
-              );
-              setWedding({ ...wedding, story });
-            }}
-          />
-        </div>
-      ))}
-      <button
-        type="button"
-        className="self-start rounded-full border border-line px-4 py-2 text-sm text-ink"
-        onClick={() => {
-          setWedding({
-            ...wedding,
-            story: [
-              ...wedding.story,
-              {
-                id: crypto.randomUUID(),
-                dateLabel: "",
-                title: "",
-                body: "",
-              },
-            ],
-          });
-        }}
-      >
-        Tambah bagian cerita
-      </button>
+        ))}
+        <button
+          type="button"
+          className="self-start rounded-full border border-jade/30 px-4 py-2 text-sm text-jade-deep"
+          onClick={() => {
+            setWedding({
+              ...wedding,
+              story: [
+                ...wedding.story,
+                {
+                  id: crypto.randomUUID(),
+                  dateLabel: "",
+                  title: "",
+                  body: "",
+                },
+              ],
+            });
+          }}
+        >
+          Tambah bagian cerita
+        </button>
+      </section>
+
       <button
         type="submit"
         className="self-start rounded-full bg-sapphire px-5 py-3 text-sm font-semibold text-white"
