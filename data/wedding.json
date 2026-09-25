@@ -42,27 +42,33 @@
   "story": [
     {
       "id": "pertemuan",
-      "dateLabel": "2019",
+      "dateLabel": "Juni 2025",
       "title": "Pertemuan yang tak disangka",
-      "body": "Kami bertemu di kampus. Obrolan soal buku, keluarga, dan cita-cita ternyata menuntun kami pada rasa nyaman yang pelan-pelan tumbuh."
+      "body": "Berawal dari sebuah kejadian tak terduga dan permintaan rekaman CCTV, kami dipertemukan. Awalnya hanya ingin berteman, tak pernah menyangka akan sampai sejauh ini."
     },
     {
       "id": "dekat",
-      "dateLabel": "2023",
-      "title": "Semakin dekat",
-      "body": "Bukan drama. Hanya percakapan jujur tentang kesiapan membangun rumah tangga, dengan restu kedua keluarga."
+      "dateLabel": "Agustus 2025",
+      "title": "Mulai Serius",
+      "body": "Setelah dua bulan saling mengenal, keseriusan mulai disampaikan. Kami memilih untuk melangkah jika memang benar-benar serius."
+    },
+    {
+      "id": "restu",
+      "dateLabel": "November - Desember 2025",
+      "title": "Meminta Restu",
+      "body": "Niat itu dibuktikan. Keseriusan disampaikan, lalu dilanjutkan dengan meminta izin dan restu kepada keluarga."
     },
     {
       "id": "lamaran",
-      "dateLabel": "2025",
-      "title": "Lamaran di rumah",
-      "body": "Di ruang tamu yang hangat, kedua keluarga bertemu. Ada air mata haru, ada tawa, dan ada janji untuk menjaga satu sama lain."
+      "dateLabel": "Februari 2026",
+      "title": "Lamaran",
+      "body": "Dengan restu kedua keluarga, kami mengikat niat untuk melanjutkan perjalanan bersama."
     },
     {
-      "id": "hari-bahagia",
-      "dateLabel": "2026",
-      "title": "Menuju hari yang dinanti",
-      "body": "Inilah undangan kami. Kehadiran Anda membuat hari ini terasa lebih lengkap."
+      "id": "babak-baru",
+      "dateLabel": "Januari 2027",
+      "title": "Babak Baru",
+      "body": "Kini, perjalanan itu membawa kami pada satu tujuan: membangun rumah tangga dan menjalani kehidupan bersama."
     }
   ],
   "quran": [
