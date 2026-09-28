@@ -7,7 +7,14 @@ import type {
 } from "@/lib/types";
 
 export async function readWedding(): Promise<WeddingContent> {
-  return readJsonDocument<WeddingContent>("wedding.json");
+  const wedding = await readJsonDocument<WeddingContent>("wedding.json");
+  return {
+    ...wedding,
+    gift: {
+      note: wedding.gift?.note ?? "",
+      accounts: wedding.gift?.accounts ?? [],
+    },
+  };
 }
 
 export async function writeWedding(wedding: WeddingContent): Promise<void> {

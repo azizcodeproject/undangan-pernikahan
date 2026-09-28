@@ -5,6 +5,7 @@ import { Cover } from "@/components/invitation/Cover";
 import { CoupleIntro } from "@/components/invitation/CoupleIntro";
 import { EventSection } from "@/components/invitation/EventSection";
 import { GallerySection } from "@/components/invitation/GallerySection";
+import { GiftSection } from "@/components/invitation/GiftSection";
 import { GuestbookSection } from "@/components/invitation/GuestbookSection";
 import { InvitationFooter } from "@/components/invitation/InvitationFooter";
 import { InvitationNav } from "@/components/invitation/InvitationNav";
@@ -60,16 +61,17 @@ export function InvitationApp({
       <InvitationNav
         coupleNames={coupleDisplayName(wedding.groom.name, wedding.bride.name)}
       />
-      <main className="pb-20">
+      <main>
         <CoupleIntro wedding={wedding} guestName={guestName} />
         <QuranSection ayahs={wedding.quran} />
         <EventSection wedding={wedding} />
         <StorySection chapters={wedding.story} />
         <GallerySection items={gallery} />
         <RsvpSection />
+        <GiftSection gift={wedding.gift} />
         <GuestbookSection initialMessages={messages} />
+        <InvitationFooter wedding={wedding} />
       </main>
-      <InvitationFooter wedding={wedding} />
     </div>
   );
 }

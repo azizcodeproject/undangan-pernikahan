@@ -71,7 +71,7 @@ export function GuestbookSection({ initialMessages }: GuestbookSectionProps) {
         title="Pesan untuk Pengantin"
         description="Tulis doa atau ucapan. Kami akan membacanya pelan-pelan."
       />
-      <div className="mx-auto grid max-w-5xl gap-6 lg:grid-cols-[1fr_1.1fr]">
+      <div className="mx-auto grid max-w-5xl items-start gap-6 lg:grid-cols-[1fr_1.1fr]">
         <Reveal>
           <form
             onSubmit={handleSubmit}
@@ -110,15 +110,34 @@ export function GuestbookSection({ initialMessages }: GuestbookSectionProps) {
           </form>
         </Reveal>
 
-        <div className="flex flex-col gap-3">
-          {messages.slice(0, 8).map((entry) => (
-            <Reveal key={entry.id}>
-              <article className="rounded-3xl border border-line bg-card px-5 py-4">
-                <p className="font-serif text-lg text-sapphire-deep">{entry.name}</p>
-                <p className="mt-2 text-sm leading-7 text-muted">{entry.message}</p>
-              </article>
-            </Reveal>
-          ))}
+        <div
+          className={
+            messages.length > 5
+              ? "max-h-[28rem] overflow-y-auto overscroll-contain pr-1 sm:max-h-[32rem]"
+              : undefined
+          }
+        >
+          <div className="flex flex-col gap-3">
+            {messages.length === 0 ? (
+              <p className="rounded-3xl border border-dashed border-line bg-card/70 px-5 py-8 text-center text-sm text-muted">
+                Belum ada pesan. Jadilah yang pertama menulis ucapan.
+              </p>
+            ) : (
+              messages.map((entry) => (
+                <article
+                  key={entry.id}
+                  className="rounded-3xl border border-line bg-card px-5 py-4"
+                >
+                  <p className="font-serif text-lg text-sapphire-deep">
+                    {entry.name}
+                  </p>
+                  <p className="mt-2 text-sm leading-7 text-muted">
+                    {entry.message}
+                  </p>
+                </article>
+              ))
+            )}
+          </div>
         </div>
       </div>
     </section>

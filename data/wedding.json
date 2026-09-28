@@ -88,5 +88,22 @@
       "latin": "Yā ayyuhan-nāsuttaqū rabbakumullazī khalaqa kum min nafsin wāḥidatin wa khalaqa min-hā zawjahā wa bassa min-humā rijālan kasīran wa nisā'ā. Wattaqullāhallazī tasā'alūna bihī wal-arḥām. Innallāha kāna 'alaikum raqībā.",
       "meaning": "Wahai manusia! Bertakwalah kepada Tuhanmu yang telah menciptakan kamu dari diri yang satu, dan menciptakan pasangannya dari dirinya; lalu dari keduanya Allah memperkembangbiakkan laki-laki dan perempuan yang banyak. Bertakwalah kepada Allah yang dengan nama-Nya kamu saling meminta, dan peliharalah hubungan kekeluargaan. Sesungguhnya Allah selalu menjaga dan mengawasimu."
     }
-  ]
+  ],
+  "gift": {
+    "note": "Doa restu Anda sudah lebih dari cukup. Jika berkenan memberi tanda kasih, berikut rekening yang bisa digunakan.",
+    "accounts": [
+      {
+        "id": "gift-bca",
+        "bankName": "BCA",
+        "accountName": "Yusuf",
+        "accountNumber": "1234567890"
+      },
+      {
+        "id": "gift-mandiri",
+        "bankName": "Mandiri",
+        "accountName": "Sintia",
+        "accountNumber": "0987654321"
+      }
+    ]
+  }
 }

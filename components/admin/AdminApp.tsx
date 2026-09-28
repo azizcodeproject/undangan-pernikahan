@@ -364,7 +364,13 @@ function WeddingEditor() {
       .then((response) => response.json())
       .then((payload: { wedding?: WeddingContent }) => {
         if (payload.wedding) {
-          setWedding(payload.wedding);
+          setWedding({
+            ...payload.wedding,
+            gift: {
+              note: payload.wedding.gift?.note ?? "",
+              accounts: payload.wedding.gift?.accounts ?? [],
+            },
+          });
         }
       });
   }, []);
@@ -630,6 +636,141 @@ function WeddingEditor() {
         </button>
       </section>
 
+      <section className="grid gap-3 rounded-3xl border border-sand bg-sand/30 p-4">
+        <div>
+          <p className="text-xs tracking-[0.18em] text-sapphire uppercase">
+            Tanda kasih
+          </p>
+          <h3 className="font-serif text-xl text-sapphire-deep">Hadiah</h3>
+          <p className="mt-1 text-sm text-muted">
+            Rekening yang tampil di undangan. Kosongkan semua rekening jika
+            bagian hadiah ingin disembunyikan.
+          </p>
+        </div>
+        <TextAreaField
+          label="Catatan singkat"
+          value={wedding.gift?.note ?? ""}
+          onChange={(value) =>
+            setWedding({
+              ...wedding,
+              gift: {
+                note: value,
+                accounts: wedding.gift?.accounts ?? [],
+              },
+            })
+          }
+        />
+        {(wedding.gift?.accounts ?? []).map((account, index) => (
+          <div
+            key={account.id}
+            className="grid gap-3 rounded-2xl border border-line bg-card p-4 md:grid-cols-2"
+          >
+            <div className="flex items-center justify-between gap-3 md:col-span-2">
+              <p className="font-medium text-ink">Rekening {index + 1}</p>
+              <button
+                type="button"
+                className="rounded-full border border-sapphire/20 px-3 py-1 text-sm text-sapphire"
+                onClick={() => {
+                  setWedding({
+                    ...wedding,
+                    gift: {
+                      note: wedding.gift?.note ?? "",
+                      accounts: (wedding.gift?.accounts ?? []).filter(
+                        (_, accountIndex) => accountIndex !== index,
+                      ),
+                    },
+                  });
+                }}
+              >
+                Hapus
+              </button>
+            </div>
+            <TextField
+              label="Bank"
+              value={account.bankName}
+              onChange={(value) => {
+                const accounts = (wedding.gift?.accounts ?? []).map(
+                  (entry, accountIndex) =>
+                    accountIndex === index
+                      ? { ...entry, bankName: value }
+                      : entry,
+                );
+                setWedding({
+                  ...wedding,
+                  gift: {
+                    note: wedding.gift?.note ?? "",
+                    accounts,
+                  },
+                });
+              }}
+            />
+            <TextField
+              label="Atas nama"
+              value={account.accountName}
+              onChange={(value) => {
+                const accounts = (wedding.gift?.accounts ?? []).map(
+                  (entry, accountIndex) =>
+                    accountIndex === index
+                      ? { ...entry, accountName: value }
+                      : entry,
+                );
+                setWedding({
+                  ...wedding,
+                  gift: {
+                    note: wedding.gift?.note ?? "",
+                    accounts,
+                  },
+                });
+              }}
+            />
+            <div className="md:col-span-2">
+              <TextField
+                label="Nomor rekening"
+                value={account.accountNumber}
+                onChange={(value) => {
+                  const accounts = (wedding.gift?.accounts ?? []).map(
+                    (entry, accountIndex) =>
+                      accountIndex === index
+                        ? { ...entry, accountNumber: value }
+                        : entry,
+                  );
+                  setWedding({
+                    ...wedding,
+                    gift: {
+                      note: wedding.gift?.note ?? "",
+                      accounts,
+                    },
+                  });
+                }}
+              />
+            </div>
+          </div>
+        ))}
+        <button
+          type="button"
+          className="self-start rounded-full border border-line px-4 py-2 text-sm text-ink"
+          onClick={() => {
+            setWedding({
+              ...wedding,
+              gift: {
+                note: wedding.gift?.note ?? "",
+                accounts: [
+                  ...(wedding.gift?.accounts ?? []),
+                  {
+                    id: crypto.randomUUID(),
+                    bankName: "",
+                    accountName: "",
+                    accountNumber: "",
+                  },
+                ],
+              },
+            });
+          }}
+        >
+          Tambah rekening
+        </button>
+      </section>
+
       <button
         type="submit"
         className="self-start rounded-full bg-sapphire px-5 py-3 text-sm font-semibold text-white"
@@ -713,7 +854,7 @@ function GuestInbox() {
       <div className="grid gap-5 lg:grid-cols-2">
         <section className="rounded-3xl border border-line bg-card p-5">
           <h2 className="font-serif text-2xl text-sapphire-deep">RSVP</h2>
-          <div className="mt-4 overflow-x-auto">
+          <div className="mt-4 max-h-[28rem] overflow-auto overscroll-contain">
             <table className="w-full text-left text-sm">
               <thead>
                 <tr className="text-muted">
@@ -745,7 +886,7 @@ function GuestInbox() {
         </section>
         <section className="rounded-3xl border border-line bg-card p-5">
           <h2 className="font-serif text-2xl text-sapphire-deep">Pesan</h2>
-          <ul className="mt-4 flex flex-col gap-3">
+          <ul className="mt-4 flex max-h-[28rem] flex-col gap-3 overflow-y-auto overscroll-contain pr-1">
             {messages.map((entry) => (
               <li key={entry.id} className="rounded-2xl bg-cream px-4 py-3">
                 <div className="flex items-start justify-between gap-3">

@@ -8,7 +8,7 @@ type InvitationFooterProps = {
 
 export function InvitationFooter({ wedding }: InvitationFooterProps) {
   return (
-    <footer className="px-5 py-16 text-center">
+    <footer className="px-5 pt-8 pb-24 text-center">
       <span className="mx-auto block h-px w-16 bg-line" />
       <p className="mt-5 font-serif text-3xl text-sapphire-deep">
         {coupleDisplayName(wedding.groom.name, wedding.bride.name)}
@@ -16,10 +16,10 @@ export function InvitationFooter({ wedding }: InvitationFooterProps) {
       <p className="mx-auto mt-4 max-w-xl text-sm leading-7 text-muted">
         {wedding.closingLine}
       </p>
-      <p className="mt-8 text-xs tracking-[0.18em] text-muted uppercase">
+      <p className="mt-6 text-xs tracking-[0.18em] text-muted uppercase">
         Terima kasih sudah datang
       </p>
-      <SiteCredit className="mt-10" />
+      <SiteCredit className="mt-6" />
     </footer>
   );
 }

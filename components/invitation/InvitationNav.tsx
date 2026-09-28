@@ -4,6 +4,7 @@ const navItems = [
   { href: "#cerita", label: "Cerita" },
   { href: "#momen", label: "Momen" },
   { href: "#rsvp", label: "RSVP" },
+  { href: "#hadiah", label: "Hadiah" },
   { href: "#pesan", label: "Pesan" },
 ];
 

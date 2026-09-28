@@ -163,7 +163,7 @@ function YoutubeBackdrop({
   }, [isPlaying, isReady]);
 
   return (
-    <div className="pointer-events-none sr-only" aria-hidden>
+    <div className="pointer-events-none fixed top-0 left-0 h-px w-px overflow-hidden opacity-0" aria-hidden>
       <div id="yt-bg-player" />
     </div>
   );

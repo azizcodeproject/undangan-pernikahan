@@ -35,6 +35,18 @@ export type WeddingMusic = {
   youtubeUrl: string;
 };
 
+export type GiftAccount = {
+  id: string;
+  bankName: string;
+  accountName: string;
+  accountNumber: string;
+};
+
+export type WeddingGift = {
+  note: string;
+  accounts: GiftAccount[];
+};
+
 export type WeddingContent = {
   bride: PersonProfile;
   groom: PersonProfile;
@@ -48,6 +60,7 @@ export type WeddingContent = {
   events: WeddingEvent[];
   story: StoryChapter[];
   quran: QuranAyah[];
+  gift: WeddingGift;
 };
 
 export type GalleryItem = {
