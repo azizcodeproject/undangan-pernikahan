@@ -1,64 +1,19 @@
 @import "tailwindcss";
 
 :root {
-  --wd-color-primary-light: #059669;
-  --wd-color-primary-dark: #10b981;
-  --wd-color-secondary-light: #0e7490;
-  --wd-color-secondary-dark: #14b8a6;
-  --wd-color-background-light: #fefce8;
-  --wd-color-background-dark: #0f172a;
-  --wd-color-surface-light: #ffffff;
-  --wd-color-surface-dark: #1e293b;
-  --wd-color-text-light: #18181b;
-  --wd-color-text-dark: #f8fafc;
-  --wd-color-border-light: #e4e4e7;
-  --wd-color-border-dark: #334155;
-  --wd-color-accent-light: #d97706;
-  --wd-color-accent-dark: #fbbf24;
-  --wd-color-muted-light: #71717a;
-  --wd-color-muted-dark: #94a3b8;
-
-  --wd-font-heading: "Playfair Display", "Cormorant Garamond", serif;
-  --wd-font-body: "Inter", "DM Sans", sans-serif;
-  --wd-font-arabic: "Amiri", "Scheherazade New", serif;
-  --wd-font-accent: "Great Vibes", "Dancing Script", cursive;
-
-  --wd-spacing-xs: 4px;
-  --wd-spacing-sm: 8px;
-  --wd-spacing-md: 16px;
-  --wd-spacing-lg: 24px;
-  --wd-spacing-xl: 32px;
-  --wd-spacing-2xl: 48px;
-
-  --wd-radius-sm: 8px;
-  --wd-radius-md: 12px;
-  --wd-radius-lg: 16px;
-  --wd-radius-xl: 24px;
-  --wd-radius-full: 9999px;
-
-  --wd-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --wd-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  --wd-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-  --wd-shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-  --wd-shadow-inner: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
-
-  --wd-transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
-  --wd-transition-normal: 250ms cubic-bezier(0.4, 0, 0.2, 1);
-  --wd-transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
-
-  --jade: var(--wd-color-primary-light);
-  --jade-soft: var(--wd-color-primary-dark);
-  --jade-deep: color-mix(in srgb, var(--wd-color-primary-light) 80%, black);
-  --sapphire: var(--wd-color-secondary-light);
-  --sapphire-soft: var(--wd-color-secondary-dark);
-  --sapphire-deep: color-mix(in srgb, var(--wd-color-secondary-light) 80%, black);
-  --cream: var(--wd-color-background-light);
-  --ivory: color-mix(in srgb, var(--wd-color-background-light) 90%, var(--wd-color-surface-light));
-  --sand: color-mix(in srgb, var(--wd-color-background-light) 80%, var(--wd-color-border-light));
-  --ink: var(--wd-color-text-light);
-  --muted: var(--wd-color-muted-light);
-  --card: var(--wd-color-surface-light);
-  --line: var(--wd-color-border-light);
+  --jade: #0f766e;
+  --jade-soft: #14b8a6;
+  --jade-deep: #115e59;
+  --sapphire: #1e3a8a;
+  --sapphire-soft: #2563eb;
+  --sapphire-deep: #172554;
+  --cream: #faf6f0;
+  --ivory: #f3eee4;
+  --sand: #e7dccb;
+  --ink: #2c261f;
+  --muted: #6d645a;
+  --card: #fffdf8;
+  --line: #d8cfc0;
 }
 
 @theme inline {
@@ -87,33 +42,23 @@ html {
 body {
   background: var(--cream);
   color: var(--ink);
-  font-family: var(--wd-font-body);
-  transition: background-color var(--wd-transition-normal), color var(--wd-transition-normal);
+  font-family: var(--font-source), "Segoe UI", sans-serif;
 }
 
 ::selection {
-  background: color-mix(in srgb, var(--wd-color-primary-light) 22%, white);
-  color: var(--wd-color-text-light);
+  background: color-mix(in srgb, var(--jade) 22%, white);
+  color: var(--sapphire-deep);
 }
 
 .font-arabic {
-  font-family: var(--wd-font-arabic);
-}
-
-.font-heading {
-  font-family: var(--wd-font-heading);
-}
-
-.font-accent {
-  font-family: var(--wd-font-accent);
+  font-family: var(--font-amiri), "Traditional Arabic", serif;
 }
 
 .paper-bg {
   background-color: var(--cream);
   background-image:
-    radial-gradient(circle at 12% 8%, color-mix(in srgb, var(--wd-color-primary-light) 6%, transparent), transparent 26%),
-    radial-gradient(circle at 88% 4%, color-mix(in srgb, var(--wd-color-secondary-light) 7%, transparent), transparent 24%);
-  transition: background-color var(--wd-transition-normal), background-image var(--wd-transition-normal);
+    radial-gradient(circle at 12% 8%, color-mix(in srgb, var(--jade) 6%, transparent), transparent 26%),
+    radial-gradient(circle at 88% 4%, color-mix(in srgb, var(--sapphire) 7%, transparent), transparent 24%);
 }
 
 .cover-overlay {
@@ -181,7 +126,7 @@ body {
 @keyframes soft-pulse {
   0%,
   100% {
-    box-shadow: 0 0 0 0 color-mix(in srgb, var(--wd-color-primary-dark) 45%, transparent);
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--jade-soft) 45%, transparent);
   }
   70% {
     box-shadow: 0 0 0 14px transparent;
@@ -190,60 +135,4 @@ body {
 
 .cta-pulse {
   animation: soft-pulse 2.4s ease-out infinite;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --jade: var(--wd-color-primary-dark);
-    --jade-soft: var(--wd-color-primary-light);
-    --jade-deep: color-mix(in srgb, var(--wd-color-primary-dark) 80%, white);
-    --sapphire: var(--wd-color-secondary-dark);
-    --sapphire-soft: var(--wd-color-secondary-light);
-    --sapphire-deep: color-mix(in srgb, var(--wd-color-secondary-dark) 80%, white);
-    --cream: var(--wd-color-background-dark);
-    --ivory: color-mix(in srgb, var(--wd-color-background-dark) 90%, var(--wd-color-surface-dark));
-    --sand: color-mix(in srgb, var(--wd-color-background-dark) 80%, var(--wd-color-border-dark));
-    --ink: var(--wd-color-text-dark);
-    --muted: var(--wd-color-muted-dark);
-    --card: var(--wd-color-surface-dark);
-    --line: var(--wd-color-border-dark);
-  }
-
-  .paper-bg {
-    background-image:
-      radial-gradient(circle at 12% 8%, color-mix(in srgb, var(--wd-color-primary-dark) 6%, transparent), transparent 26%),
-      radial-gradient(circle at 88% 4%, color-mix(in srgb, var(--wd-color-secondary-dark) 7%, transparent), transparent 24%);
-  }
-
-  ::selection {
-    background: color-mix(in srgb, var(--wd-color-primary-dark) 22%, var(--wd-color-surface-dark));
-    color: var(--wd-color-text-dark);
-  }
-}
-
-.dark {
-  --jade: var(--wd-color-primary-dark);
-  --jade-soft: var(--wd-color-primary-light);
-  --jade-deep: color-mix(in srgb, var(--wd-color-primary-dark) 80%, white);
-  --sapphire: var(--wd-color-secondary-dark);
-  --sapphire-soft: var(--wd-color-secondary-light);
-  --sapphire-deep: color-mix(in srgb, var(--wd-color-secondary-dark) 80%, white);
-  --cream: var(--wd-color-background-dark);
-  --ivory: color-mix(in srgb, var(--wd-color-background-dark) 90%, var(--wd-color-surface-dark));
-  --sand: color-mix(in srgb, var(--wd-color-background-dark) 80%, var(--wd-color-border-dark));
-  --ink: var(--wd-color-text-dark);
-  --muted: var(--wd-color-muted-dark);
-  --card: var(--wd-color-surface-dark);
-  --line: var(--wd-color-border-dark);
-}
-
-.dark .paper-bg {
-  background-image:
-    radial-gradient(circle at 12% 8%, color-mix(in srgb, var(--wd-color-primary-dark) 6%, transparent), transparent 26%),
-    radial-gradient(circle at 88% 4%, color-mix(in srgb, var(--wd-color-secondary-dark) 7%, transparent), transparent 24%);
-}
-
-.dark ::selection {
-  background: color-mix(in srgb, var(--wd-color-primary-dark) 22%, var(--wd-color-surface-dark));
-  color: var(--wd-color-text-dark);
 }

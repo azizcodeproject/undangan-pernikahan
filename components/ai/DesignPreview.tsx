@@ -108,6 +108,9 @@ export function DesignPreview({ designDraft, weddingData, className = "" }: Desi
     css += `  --jade-deep: color-mix(in srgb, ${tokens.colors.primary.light} 80%, black);\n`;
     css += `  --sapphire-deep: color-mix(in srgb, ${tokens.colors.secondary.light} 80%, black);\n`;
     css += "}\n";
+    css += `.wd-preview-scope .font-heading { font-family: var(--wd-font-heading, "Playfair Display", serif); }\n`;
+    css += `.wd-preview-scope .font-accent { font-family: var(--wd-font-accent, "Great Vibes", cursive); }\n`;
+    css += `.wd-preview-scope .font-body { font-family: var(--wd-font-body, "Inter", sans-serif); }\n`;
 
     css += `@media (prefers-color-scheme: dark) {
   .wd-preview-scope {
