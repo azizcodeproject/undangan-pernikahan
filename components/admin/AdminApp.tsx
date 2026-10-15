@@ -15,8 +15,9 @@ import type {
   RsvpEntry,
   WeddingContent,
 } from "@/lib/types";
+import { WeddingChat } from "@/components/ai/WeddingChat";
 
-type AdminTab = "galeri" | "undangan" | "tamu";
+type AdminTab = "galeri" | "undangan" | "tamu" | "ai-planner";
 
 const attendanceLabel: Record<RsvpEntry["attendance"], string> = {
   yes: "Hadir",
@@ -124,6 +125,7 @@ export function AdminApp() {
             ["galeri", "Galeri"],
             ["undangan", "Data acara"],
             ["tamu", "Tamu & pesan"],
+            ["ai-planner", "AI Planner"],
           ] as const
         ).map(([tab, label]) => (
           <button
@@ -145,6 +147,7 @@ export function AdminApp() {
         {activeTab === "galeri" ? <GalleryManager /> : null}
         {activeTab === "undangan" ? <WeddingEditor /> : null}
         {activeTab === "tamu" ? <GuestInbox /> : null}
+        {activeTab === "ai-planner" ? <AIPlannerTab /> : null}
       </div>
       <SiteCredit className="mt-auto pt-10 pb-2" />
     </main>
@@ -968,5 +971,22 @@ function TextAreaField({
         className="rounded-2xl border border-line bg-cream px-4 py-3 outline-none focus:border-jade"
       />
     </label>
+  );
+}
+
+function AIPlannerTab() {
+  return (
+    <section className="rounded-3xl border border-line bg-card p-5 h-[700px]">
+      <div className="mb-4">
+        <h2 className="font-serif text-2xl text-sapphire-deep">AI Wedding Planner</h2>
+        <p className="mt-1 text-sm text-muted">
+          Ngobrol sama AI untuk buat undangan pernikahan lengkap. AI bakal tanya
+          bertahap & isiin form otomatis.
+        </p>
+      </div>
+      <div className="h-[600px]">
+        <WeddingChat />
+      </div>
+    </section>
   );
 }

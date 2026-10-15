@@ -28,6 +28,8 @@ npm start
 | --- | --- | --- |
 | `CMS_PASSWORD` | `change-me` | Kata sandi halaman `/admin` |
 | `BLOB_READ_WRITE_TOKEN` | (kosong) | Token baca/tulis Vercel Blob. Wajib di Production/Preview. Kosongkan di `npm run dev` agar memakai `data/*.json`. |
+| `OPENAI_API_KEY` | (kosong) | Kunci OpenAI untuk tab **AI Planner** di CMS (chat agenik isi konten + desain). Wajib di Production; endpoint `/api/ai` dilindungi login CMS. |
+| `OPENAI_MODEL` | `gpt-4o-mini` | Model OpenAI yang dipakai AI Planner. |
 
 Salin `.env.example` menjadi `.env.local` lalu ganti sandinya sebelum dipakai di produksi. Di Vercel, isi variabel yang sama di Project Settings → Environment Variables (Production + Preview).
 
@@ -89,6 +91,7 @@ Repo GitHub yang privat tetap bisa menghasilkan situs publik di `yusufsintia.ver
 5. Environment Variables:
    - `CMS_PASSWORD` (jangan pakai `change-me` di produksi)
    - `BLOB_READ_WRITE_TOKEN` (dari Vercel Blob store yang dihubungkan ke project ini)
+   - `OPENAI_API_KEY` (untuk tab AI Planner; opsional kalau fitur AI tidak dipakai)
 6. Deploy. Domain `*.vercel.app` bersifat publik — tamu tidak perlu akun GitHub.
 
 Custom domain (opsional) bisa ditambahkan nanti di Vercel → Project → Domains.
