@@ -108,43 +108,58 @@ export function DesignPreview({ designDraft, weddingData, className = "" }: Desi
   return (
     <div
       className={`relative overflow-hidden rounded-2xl border border-line bg-card ${className}`}
-      style={{ ...previewVars, minHeight: "420px", maxHeight: "600px" }}
+      style={{ ...previewVars, minHeight: "500px", maxHeight: "600px" }}
     >
       <div className="absolute inset-0 cover-overlay" />
-      <div className="relative flex h-full flex-col overflow-hidden">
+      <div className="relative flex h-full flex-col">
         <header className="flex items-center justify-between px-4 py-3">
           <span className="text-xs font-medium text-white/80 uppercase tracking-wider">Preview</span>
-          <span className="text-xs text-white/60">{designDraft.theme || "default"}</span>
+          <div className="flex items-center gap-2">
+            <span className="text-xs text-white/60">{designDraft.theme || "default"}</span>
+          </div>
         </header>
 
-        <main className="flex flex-1 flex-col items-center justify-center gap-3 px-5 text-center">
-          <p className="font-accent text-lg text-white/90">{tagline}</p>
+        <main className="flex flex-1 flex-col items-center justify-center px-6 text-center">
+          <div className="mb-4">
+            <p className="font-accent text-2xl md:text-3xl text-white/90">{tagline}</p>
+          </div>
 
-          <p className="font-heading text-2xl font-light leading-tight text-white">
-            {groomName} <span className="font-accent">&</span> {brideName}
-          </p>
+          <div className="mb-6 flex flex-col items-center gap-2">
+            <p className="font-heading text-4xl md:text-6xl lg:text-7xl font-light text-white">
+              {groomName} <span className="font-accent">&</span> {brideName}
+            </p>
+            <p className="font-body text-lg md:text-xl text-white/80 max-w-md">
+              {openingLine}
+            </p>
+          </div>
 
-          <p className="font-body text-xs leading-relaxed text-white/80 max-w-[16rem]">
-            {openingLine}
-          </p>
-
-          <div className="mt-2 flex items-center justify-center gap-2 text-white/80">
-            <span className="font-body text-xs">📅</span>
-            <time className="font-body text-xs" dateTime={weddingDate}>
+          <div className="mb-8 flex items-center justify-center gap-4 text-white/80">
+            <span className="font-body">📅</span>
+            <time className="font-body text-lg" dateTime={weddingDate}>
               {formattedDate}
             </time>
           </div>
 
-          <button className="mt-3 w-full max-w-[12rem] rounded-full border border-white/20 bg-white/10 px-5 py-2 text-xs text-white backdrop-blur-sm hover:bg-white/20 transition-all duration-300">
-            Lihat Undangan
-          </button>
+          <div className="mt-auto mb-8 w-full max-w-xs">
+            <button className="w-full rounded-full bg-white/10 px-6 py-3 text-white backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-all duration-300">
+              Lihat Undangan
+            </button>
+          </div>
         </main>
 
-        <footer className="px-4 py-2 text-center">
-          <p className="text-[10px] text-white/50">
+        <footer className="px-4 py-3 text-center">
+          <p className="text-xs text-white/50">
             Preview mode — tampilan final mungkin berbeda
           </p>
         </footer>
+      </div>
+
+      <div className="absolute bottom-4 left-4 right-4 flex justify-center gap-2 pointer-events-none">
+        <div className="flex gap-1" style={{ pointerEvents: "auto" }}>
+          <div className="w-2 h-2 rounded-full bg-white/50 animate-bounce" style={{ animationDelay: "0ms" }} />
+          <div className="w-2 h-2 rounded-full bg-white/50 animate-bounce" style={{ animationDelay: "150ms" }} />
+          <div className="w-2 h-2 rounded-full bg-white/50 animate-bounce" style={{ animationDelay: "300ms" }} />
+        </div>
       </div>
     </div>
   );
@@ -160,9 +175,9 @@ export function DesignTokensDisplay({ designDraft }: { designDraft: DesignPrevie
   };
 
   return (
-    <div className="mt-3 rounded-xl border border-line bg-cream/50 p-4 max-h-64 overflow-auto">
-      <h4 className="font-serif text-sm text-sapphire-deep mb-2">Design Tokens Aktif</h4>
-      <pre className="text-[11px] font-mono bg-white/50 p-3 rounded-xl overflow-auto text-left max-h-44 text-neutral-900">
+    <div className="mt-3 rounded-xl border border-line bg-cream/50 p-4 max-h-96 overflow-auto">
+      <h4 className="font-serif text-lg text-sapphire-deep mb-3">Design Tokens Aktif</h4>
+      <pre className="text-xs font-mono bg-white/50 p-3 rounded-xl overflow-auto text-left max-h-80 text-neutral-900">
         {JSON.stringify(tokens, null, 2)}
       </pre>
     </div>
