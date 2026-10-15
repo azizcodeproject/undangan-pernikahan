@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import type { DesignTokens } from "@/lib/design-tokens";
 import { defaultDesignTokens, applyTheme, presetThemes, tokensToCSSVars } from "@/lib/design-tokens";
 
@@ -29,68 +29,103 @@ interface DesignPreviewProps {
 }
 
 export function DesignPreview({ designDraft, weddingData, className = "" }: DesignPreviewProps) {
-  const previewVars = useMemo(() => {
-    let tokens: DesignTokens = { ...defaultDesignTokens };
+  const containerRef = useRef<HTMLDivElement>(null);
+  const styleRef = useRef<HTMLStyleElement | null>(null);
+
+  const tokens = useMemo(() => {
+    let result: DesignTokens = { ...defaultDesignTokens };
 
     if (designDraft.theme && designDraft.theme !== "custom") {
-      tokens = applyTheme(tokens, designDraft.theme as keyof typeof presetThemes);
+      result = applyTheme(result, designDraft.theme as keyof typeof presetThemes);
     }
 
     if (designDraft.colors) {
-      tokens = {
-        ...tokens,
-        colors: { ...tokens.colors, ...designDraft.colors } as DesignTokens["colors"],
+      result = {
+        ...result,
+        colors: { ...result.colors, ...designDraft.colors } as DesignTokens["colors"],
       };
     }
 
     if (designDraft.fonts) {
-      tokens = {
-        ...tokens,
-        fonts: { ...tokens.fonts, ...designDraft.fonts } as DesignTokens["fonts"],
+      result = {
+        ...result,
+        fonts: { ...result.fonts, ...designDraft.fonts } as DesignTokens["fonts"],
       };
     }
 
     if (designDraft.spacing) {
-      tokens = {
-        ...tokens,
-        spacing: { ...tokens.spacing, ...designDraft.spacing } as DesignTokens["spacing"],
+      result = {
+        ...result,
+        spacing: { ...result.spacing, ...designDraft.spacing } as DesignTokens["spacing"],
       };
     }
 
     if (designDraft.borderRadius) {
-      tokens = {
-        ...tokens,
-        borderRadius: { ...tokens.borderRadius, ...designDraft.borderRadius } as DesignTokens["borderRadius"],
+      result = {
+        ...result,
+        borderRadius: { ...result.borderRadius, ...designDraft.borderRadius } as DesignTokens["borderRadius"],
       };
     }
 
     if (designDraft.shadows) {
-      tokens = {
-        ...tokens,
-        shadows: { ...tokens.shadows, ...designDraft.shadows } as DesignTokens["shadows"],
+      result = {
+        ...result,
+        shadows: { ...result.shadows, ...designDraft.shadows } as DesignTokens["shadows"],
       };
     }
 
     if (designDraft.transitions) {
-      tokens = {
-        ...tokens,
-        transitions: { ...tokens.transitions, ...designDraft.transitions } as DesignTokens["transitions"],
+      result = {
+        ...result,
+        transitions: { ...result.transitions, ...designDraft.transitions } as DesignTokens["transitions"],
       };
     }
 
-    const vars = tokensToCSSVars(tokens, "wd");
-
-    return {
-      ...vars,
-      "--card": tokens.colors.surface.light,
-      "--line": tokens.colors.border.light,
-      "--cream": tokens.colors.background.light,
-      "--ink": tokens.colors.text.light,
-      "--muted": tokens.colors.muted.light,
-      "--jade": tokens.colors.primary.light,
-      "--sapphire": tokens.colors.secondary.light,
-    } as React.CSSProperties & Record<string, string>;
+    return result;
   }, [designDraft]);
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    const cssVars = tokensToCSSVars(tokens, "wd");
+
+    if (!styleRef.current) {
+      styleRef.current = document.createElement("style");
+      containerRef.current.appendChild(styleRef.current);
+    }
+
+    let css = ".wd-preview-scope {\n";
+    for (const [key, value] of Object.entries(cssVars)) {
+      css += `  ${key}: ${value};\n`;
+    }
+    css += `  --card: ${tokens.colors.surface.light};\n`;
+    css += `  --line: ${tokens.colors.border.light};\n`;
+    css += `  --cream: ${tokens.colors.background.light};\n`;
+    css += `  --ink: ${tokens.colors.text.light};\n`;
+    css += `  --muted: ${tokens.colors.muted.light};\n`;
+    css += `  --jade: ${tokens.colors.primary.light};\n`;
+    css += `  --sapphire: ${tokens.colors.secondary.light};\n`;
+    css += `  --jade-deep: color-mix(in srgb, ${tokens.colors.primary.light} 80%, black);\n`;
+    css += `  --sapphire-deep: color-mix(in srgb, ${tokens.colors.secondary.light} 80%, black);\n`;
+    css += "}\n";
+
+    css += `@media (prefers-color-scheme: dark) {
+  .wd-preview-scope {
+    --card: ${tokens.colors.surface.dark};
+    --line: ${tokens.colors.border.dark};
+    --cream: ${tokens.colors.background.dark};
+    --ink: ${tokens.colors.text.dark};
+    --muted: ${tokens.colors.muted.dark};
+    --jade: ${tokens.colors.primary.dark};
+    --sapphire: ${tokens.colors.secondary.dark};
+    --jade-deep: color-mix(in srgb, ${tokens.colors.primary.dark} 80%, white);
+    --sapphire-deep: color-mix(in srgb, ${tokens.colors.secondary.dark} 80%, white);
+  }
+}
+`;
+
+    styleRef.current.textContent = css;
+  }, [tokens]);
 
   const brideName = (weddingData?.bride as { name?: string })?.name || "Mempelai Wanita";
   const groomName = (weddingData?.groom as { name?: string })?.name || "Mempelai Pria";
@@ -107,8 +142,9 @@ export function DesignPreview({ designDraft, weddingData, className = "" }: Desi
 
   return (
     <div
-      className={`relative overflow-hidden rounded-2xl border border-line bg-card ${className}`}
-      style={{ ...previewVars, minHeight: "500px", maxHeight: "600px" }}
+      ref={containerRef}
+      className={`wd-preview-scope relative overflow-hidden rounded-2xl border border-line bg-card ${className}`}
+      style={{ minHeight: "500px", maxHeight: "600px" }}
     >
       <div className="absolute inset-0 cover-overlay" />
       <div className="relative flex h-full flex-col">
