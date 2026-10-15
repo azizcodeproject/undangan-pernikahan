@@ -256,6 +256,38 @@ function clampStep(value: unknown): Step {
   return stepSchema.safeParse(value).success ? (value as Step) : "names";
 }
 
+function describeStreamError(error: unknown): string {
+  let message = "Terjadi kesalahan saat memanggil AI.";
+  let status: number | undefined;
+
+  if (error instanceof Error) {
+    message = error.message || message;
+    const maybe = error as Error & { statusCode?: number };
+    if (typeof maybe.statusCode === "number") status = maybe.statusCode;
+  } else if (typeof error === "string" && error.trim()) {
+    message = error;
+  }
+
+  message = message.replace(/sk-[A-Za-z0-9_-]+/g, "sk-***").slice(0, 300);
+
+  if (status === 401) {
+    return `API key ditolak OpenAI (401). Periksa nilai OPENAI_API_KEY. Detail: ${message}`;
+  }
+  if (status === 403) {
+    return `API key tidak punya akses (403). Detail: ${message}`;
+  }
+  if (status === 404) {
+    return `Model tidak ditemukan (404). Periksa OPENAI_MODEL. Detail: ${message}`;
+  }
+  if (status === 429) {
+    return `Rate limit / kuota OpenAI habis (429). Coba lagi nanti. Detail: ${message}`;
+  }
+  if (status && status >= 500) {
+    return `OpenAI server error (${status}). Detail: ${message}`;
+  }
+  return message;
+}
+
 function getNextStep(current: Step): Step {
   const index = steps.indexOf(current);
   return steps[Math.min(index + 1, steps.length - 1)];
@@ -606,5 +638,7 @@ export async function POST(request: Request) {
     },
   });
 
-  return result.toUIMessageStreamResponse();
+  return result.toUIMessageStreamResponse({
+    onError: describeStreamError,
+  });
 }

@@ -50,6 +50,24 @@ function messageText(message: UIMessage): string {
     .join("");
 }
 
+function extractErrorMessage(raw: string | undefined): string {
+  if (!raw) return "Terjadi kesalahan. Coba lagi.";
+  const trimmed = raw.trim();
+  if (trimmed.startsWith("{")) {
+    try {
+      const parsed = JSON.parse(trimmed) as { error?: unknown; message?: unknown };
+      const candidate = parsed.error ?? parsed.message;
+      if (typeof candidate === "string" && candidate.trim()) return candidate;
+    } catch {
+      // fall through to raw text
+    }
+  }
+  if (trimmed === "An error occurred.") {
+    return "AI gagal merespons. Coba kirim lagi; jika terus gagal, periksa OPENAI_API_KEY & OPENAI_MODEL di Vercel lalu redeploy.";
+  }
+  return trimmed;
+}
+
 function messageToolParts(message: UIMessage): ToolPartView[] {
   return message.parts
     .filter((part) => part.type.startsWith("tool-"))
@@ -224,8 +242,8 @@ export function WeddingChat() {
       {busy && <TypingIndicator label="AI sedang mengetik..." />}
       {error && (
         <div className="flex justify-center">
-          <div className="bg-sapphire/10 border border-sapphire/20 text-sapphire px-4 py-2 rounded-xl text-sm">
-            {error.message || "Terjadi kesalahan. Coba lagi."}
+          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-2 rounded-xl text-sm max-w-full">
+            {extractErrorMessage(error.message)}
           </div>
         </div>
       )}
