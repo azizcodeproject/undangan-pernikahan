@@ -162,7 +162,7 @@ export function DesignTokensDisplay({ designDraft }: { designDraft: DesignPrevie
   return (
     <div className="mt-3 rounded-xl border border-line bg-cream/50 p-4 max-h-64 overflow-auto">
       <h4 className="font-serif text-sm text-sapphire-deep mb-2">Design Tokens Aktif</h4>
-      <pre className="text-[11px] font-mono bg-white/50 p-3 rounded-xl overflow-auto text-left max-h-44">
+      <pre className="text-[11px] font-mono bg-white/50 p-3 rounded-xl overflow-auto text-left max-h-44 text-neutral-900">
         {JSON.stringify(tokens, null, 2)}
       </pre>
     </div>

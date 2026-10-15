@@ -246,7 +246,7 @@ export function WeddingChat() {
           value={input}
           onChange={(event) => setInput(event.target.value)}
           placeholder="Ceritakan detail undanganmu... (contoh: nama kita Yusuf & Sintia, nikah 12 Des 2026, tema elegant warna emas)"
-          className="flex-1 rounded-2xl border border-line bg-white px-4 py-3 outline-none focus:border-jade text-sm"
+          className="flex-1 rounded-2xl border border-line bg-white px-4 py-3 text-sm text-neutral-900 outline-none focus:border-jade placeholder:text-neutral-400"
           disabled={busy}
           autoFocus
         />
@@ -403,7 +403,7 @@ export function WeddingChat() {
               </button>
             </div>
           </div>
-          <pre className="text-xs font-mono bg-white/50 p-3 rounded-xl overflow-auto max-h-48 text-left">
+          <pre className="text-xs font-mono bg-white/50 p-3 rounded-xl overflow-auto max-h-48 text-left text-neutral-900">
             {JSON.stringify(draftData, null, 2)}
           </pre>
         </div>
