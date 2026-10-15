@@ -276,7 +276,7 @@ export function WeddingChat() {
   );
 
   return (
-    <div className="flex flex-col h-full min-h-[700px] bg-card rounded-3xl border border-line overflow-hidden">
+    <div className="flex h-full min-h-0 flex-col bg-card rounded-3xl border border-line overflow-hidden">
       <div className="flex items-center justify-between p-4 border-b border-line bg-cream/50">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-jade to-sapphire flex items-center justify-center">

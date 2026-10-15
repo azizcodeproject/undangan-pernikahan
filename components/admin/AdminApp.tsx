@@ -976,7 +976,7 @@ function TextAreaField({
 
 function AIPlannerTab() {
   return (
-    <section className="rounded-3xl border border-line bg-card p-5 h-[700px]">
+    <section className="rounded-3xl border border-line bg-card p-5">
       <div className="mb-4">
         <h2 className="font-serif text-2xl text-sapphire-deep">AI Wedding Planner</h2>
         <p className="mt-1 text-sm text-muted">
@@ -984,7 +984,7 @@ function AIPlannerTab() {
           bertahap & isiin form otomatis.
         </p>
       </div>
-      <div className="h-[600px]">
+      <div className="h-[700px]">
         <WeddingChat />
       </div>
     </section>
