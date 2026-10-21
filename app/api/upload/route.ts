@@ -45,6 +45,15 @@ export async function POST(request: Request) {
   const buffer = Buffer.from(await file.arrayBuffer());
 
   try {
+    if (process.env.STORAGE_BACKEND === "neon") {
+      const { objectUrl, putObject } = await import("@/lib/storage/neon");
+      const objectKey = `uploads/${crypto.randomUUID()}${extension}`;
+      await putObject(objectKey, buffer, file.type);
+      // Bucket private: URL bertanda tangan, berlaku 1 jam.
+      const src = await objectUrl(objectKey);
+      return Response.json({ src, objectKey, expiresIn: 3600 });
+    }
+
     const src = await writePublicAsset(fileName, buffer, file.type);
     return Response.json({ src });
   } catch (error) {

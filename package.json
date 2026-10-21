@@ -8,14 +8,25 @@
     "start": "next start",
     "lint": "eslint",
     "test": "vitest run",
-    "backup:blob": "node --env-file-if-exists=.env.local scripts/backup-blob.mjs"
+    "backup:blob": "node --env-file-if-exists=.env.local scripts/backup-blob.mjs",
+    "db:generate": "node --env-file-if-exists=.env.local node_modules/drizzle-kit/bin.cjs generate",
+    "db:migrate": "node --env-file-if-exists=.env.local node_modules/drizzle-kit/bin.cjs migrate",
+    "db:seed": "node --env-file-if-exists=.env.local scripts/seed-neon.mjs"
   },
   "dependencies": {
     "@ai-sdk/openai": "^4.0.93",
     "@ai-sdk/react": "^4.0.143",
+    "@aws-sdk/client-s3": "^3.1154.0",
+    "@aws-sdk/s3-request-presigner": "^3.1154.0",
+    "@neon/config": "^1.9.3",
+    "@neon/env": "^1.6.4",
+    "@neondatabase/auth": "^0.6.0-beta",
     "@vercel/blob": "^2.8.0",
+    "@vercel/functions": "^3.10.2",
     "ai": "^7.0.140",
+    "drizzle-orm": "^0.45.4",
     "next": "16.3.6",
+    "pg": "^8.23.1",
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "zod": "^4.6.7"
@@ -23,8 +34,10 @@
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
+    "@types/pg": "^8.23.1",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "drizzle-kit": "^0.31.11",
     "eslint": "^9",
     "eslint-config-next": "16.3.6",
     "tailwindcss": "^4",
