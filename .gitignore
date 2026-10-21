@@ -45,3 +45,6 @@ next-env.d.ts
 # uploaded assets created at runtime
 /public/uploads/*
 !/public/uploads/.gitkeep
+
+# backup data produksi (berisi data pribadi tamu)
+/backups

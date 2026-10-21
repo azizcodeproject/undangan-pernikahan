@@ -4,6 +4,13 @@ Website undangan pernikahan yang elegan, hangat, dan mobile-first. Dibangun deng
 
 Data pasangan, galeri, RSVP, dan buku tamu disimpan sebagai dokumen JSON. Secara lokal (tanpa token Blob) sumbernya adalah folder `data/`. Di Vercel, tulisan memakai **Vercel Blob** agar bertahan antar request.
 
+## Rencana pengembangan
+
+Repo ini sedang diarahkan menjadi platform undangan multi-tenant (wizard, AI agent, WhatsApp terjadwal, domain, admin panel). Baca:
+
+- [`docs/RENCANA.md`](docs/RENCANA.md) — rencana produk, skema database, roadmap
+- [`docs/prompts/`](docs/prompts/) — prompt per fase untuk AI agent
+
 ## Menjalankan secara lokal
 
 ```bash

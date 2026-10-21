@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "vitest run"
+    "test": "vitest run",
+    "backup:blob": "node --env-file-if-exists=.env.local scripts/backup-blob.mjs"
   },
   "dependencies": {
     "@ai-sdk/openai": "^4.0.93",
