@@ -31,6 +31,14 @@ export function AdminApp() {
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState("");
   const [activeTab, setActiveTab] = useState<AdminTab>("galeri");
+  // Chat AI harus tetap ter-mount saat pindah tab agar riwayat percakapan
+  // tidak hilang. Tab lain tetap di-unmount supaya datanya selalu segar.
+  const [aiPlannerOpened, setAiPlannerOpened] = useState(false);
+
+  function selectTab(tab: AdminTab) {
+    if (tab === "ai-planner") setAiPlannerOpened(true);
+    setActiveTab(tab);
+  }
 
   useEffect(() => {
     fetch("/api/cms/session")
@@ -131,7 +139,7 @@ export function AdminApp() {
           <button
             key={tab}
             type="button"
-            onClick={() => setActiveTab(tab)}
+            onClick={() => selectTab(tab)}
             className={`rounded-full px-4 py-2 text-sm ${
               activeTab === tab
                 ? "bg-jade text-white"
@@ -147,7 +155,11 @@ export function AdminApp() {
         {activeTab === "galeri" ? <GalleryManager /> : null}
         {activeTab === "undangan" ? <WeddingEditor /> : null}
         {activeTab === "tamu" ? <GuestInbox /> : null}
-        {activeTab === "ai-planner" ? <AIPlannerTab /> : null}
+        {aiPlannerOpened ? (
+          <div className={activeTab === "ai-planner" ? "" : "hidden"}>
+            <AIPlannerTab />
+          </div>
+        ) : null}
       </div>
       <SiteCredit className="mt-auto pt-10 pb-2" />
     </main>
