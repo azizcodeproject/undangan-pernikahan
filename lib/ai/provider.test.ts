@@ -23,10 +23,10 @@ describe("normalizeProvider", () => {
 });
 
 describe("resolveProvider", () => {
-  it("memakai gemini-2.5-flash sebagai default", () => {
+  it("memakai gemini-3.8-flash sebagai default", () => {
     const config = resolveProvider({});
     expect(config.id).toBe("google");
-    expect(config.modelId).toBe("gemini-2.5-flash");
+    expect(config.modelId).toBe("gemini-3.8-flash");
     expect(config.configured).toBe(false);
   });
 
@@ -61,7 +61,7 @@ describe("getLanguageModel", () => {
       GOOGLE_GENERATIVE_AI_API_KEY: "test-key",
     });
     expect(model).toBeTruthy();
-    expect(model.modelId).toBe("gemini-2.5-flash");
+    expect(model.modelId).toBe("gemini-3.8-flash");
   });
 });
 

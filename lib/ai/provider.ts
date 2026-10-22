@@ -19,7 +19,7 @@ export type ProviderConfig = {
 };
 
 const DEFAULT_MODELS: Record<ProviderId, string> = {
-  google: "gemini-2.5-flash",
+  google: "gemini-3.8-flash",
   openai: "gpt-4o-mini",
   groq: "llama-3.3-70b-versatile",
   openrouter: "openrouter/auto",

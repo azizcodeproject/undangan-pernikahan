@@ -60,7 +60,7 @@ berisi ID user dari schema `neon_auth` (sengaja tanpa FK).
 ## AI Planner
 
 Default: **Google Gemini free tier** (`AI_PROVIDER=google`,
-`AI_MODEL=gemini-2.5-flash`). Ambil API key di
+`AI_MODEL=gemini-3.8-flash`). Ambil API key di
 https://aistudio.google.com/apikey lalu isi `.env.local`:
 
 ```sh
@@ -71,7 +71,7 @@ Provider lain tinggal ganti env, tanpa mengubah kode:
 
 | `AI_PROVIDER` | Model default | Env kunci |
 | --- | --- | --- |
-| `google` | `gemini-2.5-flash` | `GOOGLE_GENERATIVE_AI_API_KEY` |
+| `google` | `gemini-3.8-flash` | `GOOGLE_GENERATIVE_AI_API_KEY` |
 | `openai` | `gpt-4o-mini` | `OPENAI_API_KEY` |
 | `groq` | `llama-3.3-70b-versatile` | `GROQ_API_KEY` |
 | `openrouter` | `openrouter/auto` | `OPENROUTER_API_KEY` |
