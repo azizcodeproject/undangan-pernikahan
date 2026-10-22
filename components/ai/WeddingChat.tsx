@@ -2,7 +2,7 @@
 
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport, type UIMessage } from "ai";
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { DesignPreview, DesignTokensDisplay } from "@/components/ai/DesignPreview";
 
 type DesignDraft = {
@@ -145,6 +145,62 @@ function TypingIndicator({ label }: { label: string }) {
   );
 }
 
+const CHAT_STORAGE_KEY = "wedding-chat:v1";
+// Batasi jumlah pesan yang disimpan agar tidak menabrak kuota sessionStorage.
+const MAX_STORED_MESSAGES = 60;
+
+type StoredChat = {
+  version: 1;
+  messages: UIMessage[];
+};
+
+function readStoredChat(): UIMessage[] {
+  try {
+    const raw = sessionStorage.getItem(CHAT_STORAGE_KEY);
+    if (!raw) return [];
+
+    const parsed = JSON.parse(raw) as Partial<StoredChat>;
+    if (parsed.version !== 1 || !Array.isArray(parsed.messages)) return [];
+
+    return parsed.messages.filter(
+      (message): message is UIMessage =>
+        Boolean(message) &&
+        typeof message === "object" &&
+        typeof message.id === "string" &&
+        Array.isArray(message.parts),
+    );
+  } catch {
+    return [];
+  }
+}
+
+function writeStoredChat(messages: UIMessage[]) {
+  try {
+    if (messages.length === 0) {
+      sessionStorage.removeItem(CHAT_STORAGE_KEY);
+      return;
+    }
+
+    sessionStorage.setItem(
+      CHAT_STORAGE_KEY,
+      JSON.stringify({
+        version: 1,
+        messages: messages.slice(-MAX_STORED_MESSAGES),
+      } satisfies StoredChat),
+    );
+  } catch {
+    // Kuota penuh atau storage diblokir: chat tetap jalan tanpa persistensi.
+  }
+}
+
+function clearStoredChat() {
+  try {
+    sessionStorage.removeItem(CHAT_STORAGE_KEY);
+  } catch {
+    // abaikan
+  }
+}
+
 export function WeddingChat() {
   const [showDraft, setShowDraft] = useState(false);
   const [showDesignPanel, setShowDesignPanel] = useState(true);
@@ -204,6 +260,25 @@ export function WeddingChat() {
   }, []);
 
   const busy = status === "submitted" || status === "streaming";
+  const hydratedRef = useRef(false);
+
+  // Pulihkan riwayat sekali setelah mount, lalu simpan setiap perubahan.
+  // Digabung agar restore tidak langsung menimpa storage dengan state kosong.
+  useEffect(() => {
+    if (!hydratedRef.current) {
+      hydratedRef.current = true;
+      const stored = readStoredChat();
+      if (stored.length > 0) {
+        setMessages((current) => (current.length > 0 ? current : stored));
+        return;
+      }
+    }
+
+    // Lewati saat streaming: pesan berubah tiap chunk. Begitu selesai,
+    // status berubah lagi dan hasil akhirnya tetap tersimpan.
+    if (status === "streaming") return;
+    writeStoredChat(messages);
+  }, [messages, status, setMessages]);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -224,6 +299,7 @@ export function WeddingChat() {
 
   const handleReset = () => {
     setMessages([]);
+    clearStoredChat();
     setSaveState("idle");
     setSaveError(null);
     lastSavedRef.current = null;
@@ -331,7 +407,7 @@ export function WeddingChat() {
             onClick={handleReset}
             className="rounded-xl border border-sapphire/20 px-3 py-1 text-xs text-sapphire hover:bg-sapphire/5 transition"
           >
-            Reset Chat
+            Mulai ulang
           </button>
         </div>
       </div>
