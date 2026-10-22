@@ -1,6 +1,8 @@
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import { createOpenAI } from "@ai-sdk/openai";
+import type { LanguageModelV4 } from "@ai-sdk/provider";
 import type { LanguageModel } from "ai";
+import { createFallbackModel } from "./fallback-model";
 
 export type ProviderId =
   | "google"
@@ -14,17 +16,32 @@ export type ProviderConfig = {
   id: ProviderId;
   label: string;
   modelId: string;
+  fallbackModelIds: string[];
   apiKeyEnv: string | null;
   configured: boolean;
 };
 
 const DEFAULT_MODELS: Record<ProviderId, string> = {
-  google: "gemini-3.8-flash",
+  google: "gemini-3.6-flash",
   openai: "gpt-4o-mini",
   groq: "llama-3.3-70b-versatile",
   openrouter: "openrouter/auto",
   ollama: "llama3.2",
   gateway: "openai/gpt-4o-mini",
+};
+
+/**
+ * Urutan cadangan saat model utama sedang sibuk (503 UNAVAILABLE). Model
+ * terbaru tidak selalu paling tersedia, jadi yang lebih ringan ditaruh lebih
+ * dulu agar pengguna tidak menunggu lama.
+ */
+const DEFAULT_FALLBACKS: Record<ProviderId, string[]> = {
+  google: ["gemini-3.5-flash", "gemini-3.8-flash"],
+  openai: [],
+  groq: [],
+  openrouter: [],
+  ollama: [],
+  gateway: [],
 };
 
 const LABELS: Record<ProviderId, string> = {
@@ -50,6 +67,18 @@ export function normalizeProvider(value: string | undefined): ProviderId {
   return candidate in DEFAULT_MODELS ? (candidate as ProviderId) : "google";
 }
 
+function parseFallbacks(
+  id: ProviderId,
+  value: string | undefined,
+): string[] {
+  if (!value?.trim()) return DEFAULT_FALLBACKS[id];
+
+  return value
+    .split(",")
+    .map((item) => item.trim())
+    .filter(Boolean);
+}
+
 export function resolveProvider(
   env: Record<string, string | undefined> = process.env,
 ): ProviderConfig {
@@ -60,6 +89,7 @@ export function resolveProvider(
     id,
     label: LABELS[id],
     modelId: env.AI_MODEL?.trim() || DEFAULT_MODELS[id],
+    fallbackModelIds: parseFallbacks(id, env.AI_MODEL_FALLBACKS),
     apiKeyEnv,
     configured:
       id === "ollama"
@@ -68,23 +98,22 @@ export function resolveProvider(
   };
 }
 
-/** Model siap pakai untuk `streamText` / `generateText`. */
-export function getLanguageModel(
-  env: Record<string, string | undefined> = process.env,
-): LanguageModel {
-  const config = resolveProvider(env);
-  const apiKey = config.apiKeyEnv ? env[config.apiKeyEnv]?.trim() : undefined;
-
-  switch (config.id) {
+function buildModel(
+  id: ProviderId,
+  modelId: string,
+  env: Record<string, string | undefined>,
+  apiKey: string | undefined,
+): LanguageModelV4 {
+  switch (id) {
     case "google":
-      return createGoogleGenerativeAI({ apiKey })(config.modelId);
+      return createGoogleGenerativeAI({ apiKey })(modelId);
     case "openai":
-      return createOpenAI({ apiKey })(config.modelId);
+      return createOpenAI({ apiKey })(modelId);
     case "groq":
       return createOpenAI({
         apiKey,
         baseURL: "https://api.groq.com/openai/v1",
-      })(config.modelId);
+      })(modelId);
     case "openrouter":
       return createOpenAI({
         apiKey,
@@ -93,18 +122,39 @@ export function getLanguageModel(
           "HTTP-Referer": env.APP_URL ?? "http://localhost:3000",
           "X-Title": "Undangan Digital",
         },
-      })(config.modelId);
+      })(modelId);
     case "ollama":
       return createOpenAI({
         apiKey: "ollama",
         baseURL: env.OLLAMA_BASE_URL ?? "http://127.0.0.1:11434/v1",
-      })(config.modelId);
+      })(modelId);
     case "gateway":
       return createOpenAI({
         apiKey,
         baseURL: env.NEON_AI_GATEWAY_BASE_URL,
-      })(config.modelId);
+      })(modelId);
   }
+}
+
+/** Model siap pakai untuk `streamText` / `generateText`, dengan fallback. */
+export function getLanguageModel(
+  env: Record<string, string | undefined> = process.env,
+): LanguageModel {
+  const config = resolveProvider(env);
+  const apiKey = config.apiKeyEnv ? env[config.apiKeyEnv]?.trim() : undefined;
+
+  const ids = [
+    config.modelId,
+    ...config.fallbackModelIds.filter((id) => id !== config.modelId),
+  ];
+
+  const models = ids.map((id) => buildModel(config.id, id, env, apiKey));
+  if (models.length === 1) return models[0];
+
+  return createFallbackModel(models, ({ from, to, error }) => {
+    const message = error instanceof Error ? error.message : String(error);
+    console.warn(`[ai] ${from} gagal, pindah ke ${to}: ${message.slice(0, 160)}`);
+  });
 }
 
 export function missingKeyMessage(config: ProviderConfig): string {

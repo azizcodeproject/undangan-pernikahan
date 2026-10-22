@@ -292,6 +292,12 @@ function describeStreamError(error: unknown): string {
   if (status === 429) {
     return `Rate limit / kuota ${provider.label} habis (429). Coba lagi nanti. Detail: ${message}`;
   }
+  if (
+    status === 503 ||
+    /high demand|unavailable|overloaded/i.test(message)
+  ) {
+    return `Model ${provider.label} sedang sibuk. Semua model cadangan juga gagal, jadi coba lagi 1–2 menit. Detail: ${message}`;
+  }
   if (status && status >= 500) {
     return `${provider.label} server error (${status}). Detail: ${message}`;
   }
@@ -641,6 +647,7 @@ export async function POST(request: Request) {
     tools,
     messages: modelMessages,
     stopWhen: stepCountIs(8),
+    maxRetries: 1,
     onError: ({ error }) => {
       console.error("AI stream error:", error);
     },

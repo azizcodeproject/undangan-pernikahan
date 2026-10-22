@@ -60,18 +60,28 @@ berisi ID user dari schema `neon_auth` (sengaja tanpa FK).
 ## AI Planner
 
 Default: **Google Gemini free tier** (`AI_PROVIDER=google`,
-`AI_MODEL=gemini-3.8-flash`). Ambil API key di
+`AI_MODEL=gemini-3.6-flash`). Ambil API key di
 https://aistudio.google.com/apikey lalu isi `.env.local`:
 
 ```sh
 GOOGLE_GENERATIVE_AI_API_KEY=...
 ```
 
+Model 3.8 sering kena `503 UNAVAILABLE` saat permintaan melonjak. Karena itu
+default memakai `gemini-3.6-flash`, dengan rantai cadangan otomatis:
+
+```sh
+AI_MODEL_FALLBACKS=gemini-3.5-flash,gemini-3.8-flash
+```
+
+Fallback hanya berlaku bila model gagal **sebelum** stream dimulai. Kalau
+gangguan terjadi setelah sebagian jawaban terkirim, pengguna perlu mencoba lagi.
+
 Provider lain tinggal ganti env, tanpa mengubah kode:
 
 | `AI_PROVIDER` | Model default | Env kunci |
 | --- | --- | --- |
-| `google` | `gemini-3.8-flash` | `GOOGLE_GENERATIVE_AI_API_KEY` |
+| `google` | `gemini-3.6-flash` | `GOOGLE_GENERATIVE_AI_API_KEY` |
 | `openai` | `gpt-4o-mini` | `OPENAI_API_KEY` |
 | `groq` | `llama-3.3-70b-versatile` | `GROQ_API_KEY` |
 | `openrouter` | `openrouter/auto` | `OPENROUTER_API_KEY` |

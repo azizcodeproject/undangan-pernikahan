@@ -23,11 +23,29 @@ describe("normalizeProvider", () => {
 });
 
 describe("resolveProvider", () => {
-  it("memakai gemini-3.8-flash sebagai default", () => {
+  it("memakai gemini-3.6-flash sebagai default", () => {
     const config = resolveProvider({});
     expect(config.id).toBe("google");
-    expect(config.modelId).toBe("gemini-3.8-flash");
+    expect(config.modelId).toBe("gemini-3.6-flash");
     expect(config.configured).toBe(false);
+  });
+
+  it("menyediakan model cadangan untuk Google", () => {
+    const config = resolveProvider({});
+    expect(config.fallbackModelIds).toEqual([
+      "gemini-3.5-flash",
+      "gemini-3.8-flash",
+    ]);
+  });
+
+  it("menghormati AI_MODEL_FALLBACKS", () => {
+    const config = resolveProvider({
+      AI_MODEL_FALLBACKS: "gemini-3.5-flash, gemini-3.7-flash",
+    });
+    expect(config.fallbackModelIds).toEqual([
+      "gemini-3.5-flash",
+      "gemini-3.7-flash",
+    ]);
   });
 
   it("mendeteksi API key yang terisi", () => {
@@ -61,7 +79,7 @@ describe("getLanguageModel", () => {
       GOOGLE_GENERATIVE_AI_API_KEY: "test-key",
     });
     expect(model).toBeTruthy();
-    expect(model.modelId).toBe("gemini-3.8-flash");
+    expect(model.modelId).toBe("gemini-3.6-flash");
   });
 });
 
