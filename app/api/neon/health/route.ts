@@ -14,6 +14,10 @@ export const dynamic = "force-dynamic";
 
 type Check = { name: string; ok: boolean; detail: string };
 
+function redact(value: string): string {
+  return value.replace(/(postgres(?:ql)?:\/\/)[^@\s]+@/g, "$1***@");
+}
+
 async function checkDatabase(): Promise<Check> {
   try {
     await getDb().execute(sql`select 1`);
@@ -23,7 +27,14 @@ async function checkDatabase(): Promise<Check> {
     const count = rows.rows[0]?.count ?? "0";
     return { name: "postgres", ok: true, detail: `select 1 ok, invitations=${count}` };
   } catch (error) {
-    return { name: "postgres", ok: false, detail: String(error) };
+    const err = error as Error & { code?: string; cause?: Error };
+    const detail = redact(
+      [err.message, err.code ? `code=${err.code}` : "", err.cause?.message ? `cause=${err.cause.message}` : ""]
+        .filter(Boolean)
+        .join(" | "),
+    );
+    console.error("Neon health: postgres gagal:", detail);
+    return { name: "postgres", ok: false, detail };
   }
 }
 

@@ -1,6 +1,9 @@
 import { defineConfig } from "drizzle-kit";
+import { normalizeConnectionString } from "./lib/db/url";
 
-const url = process.env.DATABASE_URL_UNPOOLED ?? process.env.DATABASE_URL;
+const url = normalizeConnectionString(
+  process.env.DATABASE_URL_UNPOOLED ?? process.env.DATABASE_URL,
+);
 
 if (!url) {
   throw new Error(

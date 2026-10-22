@@ -97,6 +97,37 @@ model (tidak memakai kuota).
 - Tenant #1 `yusufsintia` di-seed dari `data/*.json` (seed repo), bukan dari
   Blob live. Backup Blob tetap sumber kebenaran produksi.
 
+## Trusted domains (Neon Auth)
+
+Neon Auth hanya mengizinkan origin yang terdaftar. Tanpa ini, sign-in
+mengembalikan `403 Invalid origin` (localhost dikecualikan otomatis).
+
+```bash
+neon neon-auth domain add https://yusufsintia-ghacha.vercel.app
+neon neon-auth domain add https://yusup-syntia.vercel.app
+neon neon-auth domain add https://yusufsintia.vercel.app
+neon neon-auth domain list
+```
+
+Tambah origin preview hanya saat menguji, lalu hapus:
+
+```bash
+neon neon-auth domain delete https://<preview>.vercel.app
+```
+
+## Jebakan tanda kutip pada env
+
+`neon env pull` menulis nilai yang mengandung `&` dengan tanda kutip:
+
+```
+DATABASE_URL="postgresql://...?sslmode=require&..."
+```
+
+Next.js dan `node --env-file` menghapus kutip itu, tetapi Vercel menyimpannya
+apa adanya. Akibatnya `pg` membaca seluruh string sebagai host dan gagal dengan
+`getaddrinfo ENOTFOUND`. Kode sekarang menormalkan nilai lewat
+`lib/db/url.ts`; saat memasukkan env ke platform lain, tetap buang kutipnya.
+
 ## Env untuk Vercel
 
 Tambahkan manual di *Project → Settings → Environment Variables*:

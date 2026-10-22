@@ -1,6 +1,7 @@
 import { drizzle, type NodePgDatabase } from "drizzle-orm/node-postgres";
 import { Pool } from "pg";
 import * as schema from "./schema";
+import { normalizeConnectionString } from "./url";
 
 /**
  * Satu pool per proses. Di serverless, pool dipakai ulang antar request dan
@@ -12,7 +13,7 @@ const globalForDb = globalThis as unknown as {
 };
 
 function createPool(): Pool {
-  const connectionString = process.env.DATABASE_URL;
+  const connectionString = normalizeConnectionString(process.env.DATABASE_URL);
   if (!connectionString) {
     throw new Error(
       "DATABASE_URL belum diisi. Jalankan `neon env pull` atau isi .env.local.",
