@@ -1,4 +1,5 @@
 import { sql } from "drizzle-orm";
+import { resolveProvider } from "@/lib/ai/provider";
 import { getDb } from "@/lib/db/client";
 import { callFunction } from "@/lib/neon/functions";
 import {
@@ -82,6 +83,17 @@ async function checkAuth(): Promise<Check> {
   }
 }
 
+function checkAi(): Check {
+  const provider = resolveProvider();
+  return {
+    name: "ai",
+    ok: provider.configured,
+    detail: provider.configured
+      ? `${provider.label} · ${provider.modelId}`
+      : `${provider.label} · ${provider.modelId} · ${provider.apiKeyEnv} belum diisi`,
+  };
+}
+
 export async function GET() {
   const checks = await Promise.all([
     checkDatabase(),
@@ -89,6 +101,7 @@ export async function GET() {
     checkFunctions(),
     checkAuth(),
   ]);
+  checks.push(checkAi());
 
   const ok = checks.every((check) => check.ok);
   return Response.json({ ok, checks }, { status: ok ? 200 : 503 });

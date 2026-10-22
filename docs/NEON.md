@@ -48,13 +48,38 @@ npm run db:seed       # idempoten; tidak menimpa konten yang sudah ada
 | Storage | `lib/storage/neon.ts` | S3 path-style, bucket private, presigned URL |
 | Upload | `app/api/upload/route.ts` | Aktif bila `STORAGE_BACKEND=neon` |
 | Functions | `lib/neon/functions.ts` | Baca `NEON_FUNCTION_*_BASE_URL` |
-| Health | `app/api/neon/health/route.ts` | Uji DB, storage, functions, auth |
+| AI Planner | `lib/ai/provider.ts` | Registry provider; default Gemini |
+| Health | `app/api/neon/health/route.ts` | Uji DB, storage, functions, auth, konfigurasi AI |
 
 ## Skema saat ini
 
 `invitations`, `invitation_versions`, `media`, `guests`, `rsvp_entries`,
 `guestbook_messages`. Semua tabel tenant memakai `invitation_id`; `owner_id`
 berisi ID user dari schema `neon_auth` (sengaja tanpa FK).
+
+## AI Planner
+
+Default: **Google Gemini free tier** (`AI_PROVIDER=google`,
+`AI_MODEL=gemini-2.5-flash`). Ambil API key di
+https://aistudio.google.com/apikey lalu isi `.env.local`:
+
+```sh
+GOOGLE_GENERATIVE_AI_API_KEY=...
+```
+
+Provider lain tinggal ganti env, tanpa mengubah kode:
+
+| `AI_PROVIDER` | Model default | Env kunci |
+| --- | --- | --- |
+| `google` | `gemini-2.5-flash` | `GOOGLE_GENERATIVE_AI_API_KEY` |
+| `openai` | `gpt-4o-mini` | `OPENAI_API_KEY` |
+| `groq` | `llama-3.3-70b-versatile` | `GROQ_API_KEY` |
+| `openrouter` | `openrouter/auto` | `OPENROUTER_API_KEY` |
+| `ollama` | `llama3.2` | tanpa kunci (`OLLAMA_BASE_URL`) |
+| `gateway` | `openai/gpt-4o-mini` | `NEON_AI_GATEWAY_TOKEN` (plan berbayar) |
+
+`GET /api/neon/health` melaporkan `ai` beserta provider/model tanpa memanggil
+model (tidak memakai kuota).
 
 ## Catatan & jebakan
 
@@ -78,6 +103,7 @@ Tambahkan manual di *Project → Settings → Environment Variables*:
 `DATABASE_URL`, `DATABASE_URL_UNPOOLED`, `NEON_AUTH_BASE_URL`,
 `NEON_AUTH_JWKS_URL`, `NEON_AUTH_COOKIE_SECRET`, `AWS_ACCESS_KEY_ID`,
 `AWS_SECRET_ACCESS_KEY`, `AWS_ENDPOINT_URL_S3`, `AWS_REGION`,
-`NEON_STORAGE_BUCKET`, `STORAGE_BACKEND`.
+`NEON_STORAGE_BUCKET`, `STORAGE_BACKEND`, `AI_PROVIDER`, `AI_MODEL`,
+`GOOGLE_GENERATIVE_AI_API_KEY`.
 
 Jangan menyalin `.env.local` ke repo.

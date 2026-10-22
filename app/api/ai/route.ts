@@ -5,8 +5,12 @@ import {
   tool,
   type UIMessage,
 } from "ai";
-import { openai } from "@ai-sdk/openai";
 import { z } from "zod";
+import {
+  getLanguageModel,
+  missingKeyMessage,
+  resolveProvider,
+} from "@/lib/ai/provider";
 import { revalidatePath } from "next/cache";
 import { cmsUnauthorizedResponse, requireCmsAuth } from "@/lib/auth";
 import { writeWedding } from "@/lib/store";
@@ -268,22 +272,28 @@ function describeStreamError(error: unknown): string {
     message = error;
   }
 
-  message = message.replace(/sk-[A-Za-z0-9_-]+/g, "sk-***").slice(0, 300);
+  message = message
+    .replace(/sk-[A-Za-z0-9_-]+/g, "sk-***")
+    .replace(/AIza[0-9A-Za-z_-]{10,}/g, "AIza***")
+    .slice(0, 300);
+
+  const provider = resolveProvider();
+  const keyHint = provider.apiKeyEnv ? ` Periksa nilai ${provider.apiKeyEnv}.` : "";
 
   if (status === 401) {
-    return `API key ditolak OpenAI (401). Periksa nilai OPENAI_API_KEY. Detail: ${message}`;
+    return `API key ditolak ${provider.label} (401).${keyHint} Detail: ${message}`;
   }
   if (status === 403) {
-    return `API key tidak punya akses (403). Detail: ${message}`;
+    return `API key tidak punya akses (403).${keyHint} Detail: ${message}`;
   }
   if (status === 404) {
-    return `Model tidak ditemukan (404). Periksa OPENAI_MODEL. Detail: ${message}`;
+    return `Model tidak ditemukan (404). Periksa AI_MODEL (sekarang: ${provider.modelId}). Detail: ${message}`;
   }
   if (status === 429) {
-    return `Rate limit / kuota OpenAI habis (429). Coba lagi nanti. Detail: ${message}`;
+    return `Rate limit / kuota ${provider.label} habis (429). Coba lagi nanti. Detail: ${message}`;
   }
   if (status && status >= 500) {
-    return `OpenAI server error (${status}). Detail: ${message}`;
+    return `${provider.label} server error (${status}). Detail: ${message}`;
   }
   return message;
 }
@@ -387,12 +397,10 @@ export async function POST(request: Request) {
     return cmsUnauthorizedResponse();
   }
 
-  if (!process.env.OPENAI_API_KEY) {
+  const provider = resolveProvider();
+  if (!provider.configured) {
     return Response.json(
-      {
-        error:
-          "OPENAI_API_KEY belum diatur. Tambahkan di Environment Variables proyek Vercel lalu redeploy.",
-      },
+      { error: missingKeyMessage(provider) },
       { status: 500 },
     );
   }
@@ -628,7 +636,7 @@ export async function POST(request: Request) {
   }
 
   const result = streamText({
-    model: openai(process.env.OPENAI_MODEL || "gpt-4o-mini"),
+    model: getLanguageModel(),
     system: buildSystemPrompt(currentStep, currentDraft, currentDesign),
     tools,
     messages: modelMessages,
